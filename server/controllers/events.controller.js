@@ -1,16 +1,25 @@
-const getEvents = (req, res) => {
-  res.json([
-    { id: 1, title: "Yoga in the Park", date: "2025-10-05", price: 0 },
-    { id: 2, title: "Community Dinner", date: "2025-10-10", price: 10 },
-  ]);
+const Event = require("../models/events.model");
+
+// GET /events
+const getEvents = async (req, res) => {
+  try {
+    const events = await Event.find();
+    res.json(events);
+  } catch (err) {
+    res.status(500).json({ message: "Error fetching events", error: err });
+  }
 };
 
-const createEvent = (req, res) => {
-  console.log("TEST");
-  const newEvent = req.body;
-  res
-    .status(201)
-    .json({ message: "Event successfully created", event: newEvent });
+// POST /events
+const createEvent = async (req, res) => {
+  try {
+    const newEvent = await Event.create(req.body);
+    res
+      .status(201)
+      .json({ message: "Event successfully created", event: newEvent });
+  } catch (err) {
+    res.status(400).json({ message: "Error creating event", error: err });
+  }
 };
 
 module.exports = { getEvents, createEvent };
