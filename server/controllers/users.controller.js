@@ -1,3 +1,4 @@
+const bcrypt = require("bcrypt");
 const User = require("../models/users.model");
 
 // GET /users
@@ -34,7 +35,12 @@ const getUserByID = async (req, res) => {
 // POST /users
 const createUser = async (req, res) => {
   try {
-    const user = await User.create(req.body);
+    const { password, ...rest } = req.body;
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    const user = await User.create({ ...rest, password: hashedPassword });
+
     res.status(201).json({ message: "User successfully created", user: user });
   } catch (err) {
     res.status(400).json({ message: "Error creating user", error: err });
@@ -44,9 +50,13 @@ const createUser = async (req, res) => {
 // PATCH /users/:id
 const patchUserByID = async (req, res) => {
   const { id } = req.params;
-  const updates = req.body;
+  const updates = { ...req.body };
 
   try {
+    if (updates.password) {
+      updates.password = await bcrypt.hash(updates.password, 10);
+    }
+
     const user = await User.findByIdAndUpdate(id, updates, {
       new: true,
       runValidators: true,
