@@ -4,6 +4,7 @@ const mongoose = require("mongoose");
 require("dotenv").config();
 
 const eventsRouter = require("./routes/events");
+const usersRouter = require("./routes/users");
 
 const app = express();
 const PORT = process.env.PORT || 4000;
@@ -14,6 +15,7 @@ app.use(express.json());
 
 // Routes
 app.use("/events", eventsRouter);
+app.use("/users", usersRouter);
 
 // Root
 app.get("/", (req, res) => {
