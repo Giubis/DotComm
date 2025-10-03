@@ -1,4 +1,5 @@
 const Event = require("../models/events.model");
+const User = require("../models/users.model");
 
 // GET /events
 const getEvents = async (req, res) => {
@@ -40,6 +41,51 @@ const createEvent = async (req, res) => {
       .json({ message: "Event successfully created", event: event });
   } catch (err) {
     res.status(400).json({ message: "Error creating event", error: err });
+  }
+};
+
+// POST /events/:id/register
+const registerUserToEvent = async (req, res) => {
+  const { id: eventID } = req.params;
+  const { userID } = req.body;
+
+  try {
+    const event = await Event.findById(eventID);
+    const user = await User.findById(userID);
+
+    if (!event) {
+      return res
+        .status(404)
+        .json({ message: `Event with ID ${eventID} not found` });
+    }
+
+    if (!user) {
+      return res
+        .status(404)
+        .json({ message: `User with ID ${userID} not found` });
+    }
+
+    if (!event.attendees.includes(userID)) {
+      event.attendees.push(userID);
+      await event.save();
+    } else {
+      return res
+        .status(400)
+        .json({ message: "User already registered for this event" });
+    }
+
+    if (!user.events.includes(eventID)) {
+      user.events.push(eventID);
+      await user.save();
+    }
+
+    res
+      .status(200)
+      .json({ message: "User successfully registered for event", event, user });
+  } catch (err) {
+    res
+      .status(500)
+      .json({ message: "Error registering user for event", error: err });
   }
 };
 
@@ -95,6 +141,7 @@ module.exports = {
   getEvents,
   getEventByID,
   createEvent,
+  registerUserToEvent,
   patchEventByID,
   deleteEventByID,
 };
