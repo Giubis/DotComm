@@ -21,7 +21,7 @@ app.use("/users", usersRouter);
 
 // Health check
 app.get("/ping", (req, res) => {
-  res.status(200).json({ status: "OKAY" });
+  res.status(200).json({ status: "pong" });
 });
 
 // Database connection
@@ -30,7 +30,7 @@ const databaseConnection = async () => {
     await mongoose.connect(process.env.MONGO_URI);
     console.log("Successfully connected");
   } catch (err) {
-    console.error("Connection error:", err);
+    console.error("Connection error:", err.message);
   }
 };
 
