@@ -21,6 +21,7 @@ app.use("/users", usersRouter);
 
 // Health check
 app.head("/ping", (req, res) => {
+  console.log(`[PING] received on ${new Date().toISOString()}`);
   res.sendStatus(200);
 });
 
