@@ -3,55 +3,39 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>DotComm</title>
-    <link rel="stylesheet" href="style.css" />
+    <title>DotComm | API documentation</title>
+    <link rel="stylesheet" href="./style.css" />
   </head>
   <body>
     <header>
       <h1>DotComm</h1>
+      <h2>Endpoints</h2>
       <nav>
-        <h2>Endpoints</h2>
         <ul>
-          <li><a href="#get-root">GET /</a></li>
+          <li><strong>Users</strong></li>
           <li><a href="#get-users">GET /users</a></li>
-          <li><a href="#post-login">POST /users/login</a></li>
-          <li><a href="#post-admin">POST /users/admin</a></li>
           <li><a href="#get-user">GET /users/:id</a></li>
+          <li><a href="#post-admin">POST /users/admin</a></li>
+          <li><a href="#post-register">POST /users/register</a></li>
+          <li><a href="#post-login">POST /users/login</a></li>
           <li><a href="#patch-user">PATCH /users/:id</a></li>
           <li><a href="#delete-user">DELETE /users/:id</a></li>
+          <li><strong>Events</strong></li>
           <li><a href="#get-events">GET /events</a></li>
-          <li><a href="#post-event">POST /events</a></li>
           <li><a href="#get-event">GET /events/:id</a></li>
+          <li><a href="#post-event">POST /events</a></li>
           <li><a href="#patch-event">PATCH /events/:id</a></li>
           <li><a href="#delete-event">DELETE /events/:id</a></li>
-          <li><a href="#post-register">POST /events/:id/register</a></li>
+          <li><strong>Misc</strong></li>
+          <li><a href="#post-register-event">POST /events/:id/register</a></li>
         </ul>
       </nav>
     </header>
 
     <main>
-      <section id="get-root">
-        <h2>GET /</h2>
-        <p>Returns a JSON object describing all available API endpoints.</p>
-        <h3>Example Request</h3>
-        <pre>{}</pre>
-        <h3>Example Response</h3>
-        <pre>
-{
-  "endpoints": {
-    "users": "/users",
-    "login": "/users/login",
-    "admin": "/users/admin",
-    "events": "/events",
-    "register": "/events/:id/register"
-  }
-}</pre
-        >
-      </section>
-
       <section id="get-users">
         <h2>GET /users</h2>
-        <p>Retrieves all registered users.</p>
+        <p>Retrieves all registered users (ADMIN only).</p>
         <h3>Example Request</h3>
         <pre>{}</pre>
         <h3>Example Response</h3>
@@ -59,23 +43,152 @@
 {
   "users": [
     {
-      "username": "giulia.verdi",
-      "name": "Giulia Verdi",
-      "email": "giulia.verdi@example.com",
-      "avatar": "https://example.com/avatar.png"
+      "_id": "64f123abc456def789012345",
+      "name": "John Smith",
+      "username": "johnsmith",
+      "email": "john.smith@example.com",
+      "password": "$2b$10$...",
+      "role": "user",
+      "avatar": "https://example.com/avatar1.png",
+      "birthday": "1990-06-15",
+      "phone": "+1 555-123-4567",
+      "bio": "Software developer and coffee enthusiast.",
+      "events": ["68e555e6228fa4ad21af6704"],
+      "createdAt": "2025-10-07T16:16:56.128Z",
+      "updatedAt": "2025-10-07T16:16:56.128Z",
+      "__v": 0
+    },
+    {
+      "_id": "64f123abc456def789012348",
+      "name": "Emily Davis",
+      "username": "emilyd",
+      "email": "emily.davis@example.com",
+      "password": "$2b$10$...",
+      "role": "user",
+      "avatar": "https://example.com/avatar4.png",
+      "birthday": "1993-11-08",
+      "phone": "+1 555-222-3333",
+      "bio": "Graphic designer and amateur photographer.",
+      "events": ["68e555e6228fa4ad21af6707"],
+      "createdAt": "2025-10-07T16:25:00.128Z",
+      "updatedAt": "2025-10-07T16:25:00.128Z",
+      "__v": 0
     }
   ]
 }</pre
         >
       </section>
 
-      <section id="post-login">
-        <h2>POST /users/login</h2>
-        <p>Login a user and receive a JWT token.</p>
-        <h3>Request Body</h3>
+      <section id="get-user">
+        <h2>GET /users/:id</h2>
+        <p>Retrieves a single user by ID (ADMIN only).</p>
+        <h3>Example Request</h3>
+        <pre>{}</pre>
+        <h3>Example Response</h3>
         <pre>
 {
-  "email": "giulia.verdi@example.com",
+  "user": {
+    "_id": "64f123abc456def789012345",
+    "name": "John Smith",
+    "username": "johnsmith",
+    "email": "john.smith@example.com",
+    "password": "$2b$10$...",
+    "role": "user",
+    "avatar": "https://example.com/avatar1.png",
+    "birthday": "1990-06-15",
+    "phone": "+1 555-123-4567",
+    "bio": "Software developer and coffee enthusiast.",
+    "events": ["68e555e6228fa4ad21af6704"],
+    "createdAt": "2025-10-07T16:16:56.128Z",
+    "updatedAt": "2025-10-07T16:16:56.128Z",
+    "__v": 0
+  }
+}</pre
+        >
+      </section>
+
+      <section id="post-admin">
+        <h2>POST /users/admin</h2>
+        <p>Creates a new admin user (ADMIN only).</p>
+        <h3>Example Request</h3>
+        <pre>
+{
+  "name": "Robert Brown",
+  "username": "robertb",
+  "email": "robert.brown@example.com",
+  "password": "securePass123",
+  "role": "admin"
+}</pre
+        >
+        <h3>Example Response</h3>
+        <pre>
+{
+  "message": "Registration successful",
+  "user": {
+    "_id": "64f123abc456def789012347",
+    "name": "Robert Brown",
+    "username": "robertb",
+    "email": "robert.brown@example.com",
+    "password": "$2b$10$...",
+    "role": "admin",
+    "avatar": null,
+    "birthday": null,
+    "phone": null,
+    "bio": null,
+    "events": [],
+    "createdAt": "2025-10-07T16:20:00.128Z",
+    "updatedAt": "2025-10-07T16:20:00.128Z",
+    "__v": 0
+  },
+  "token": "JWT_TOKEN"
+}</pre
+        >
+      </section>
+
+      <section id="post-register">
+        <h2>POST /users/register</h2>
+        <p>Registers a new regular user.</p>
+        <h3>Example Request</h3>
+        <pre>
+{
+  "name": "Alice Johnson",
+  "username": "alicej",
+  "email": "alice.johnson@example.com",
+  "password": "password123"
+}</pre
+        >
+        <h3>Example Response</h3>
+        <pre>
+{
+  "message": "Registration successful",
+  "user": {
+    "_id": "64f123abc456def789012348",
+    "name": "Alice Johnson",
+    "username": "alicej",
+    "email": "alice.johnson@example.com",
+    "password": "$2b$10$...",
+    "role": "user",
+    "avatar": null,
+    "birthday": null,
+    "phone": null,
+    "bio": null,
+    "events": [],
+    "createdAt": "2025-10-07T16:25:00.128Z",
+    "updatedAt": "2025-10-07T16:25:00.128Z",
+    "__v": 0
+  },
+  "token": "JWT_TOKEN_HERE"
+}</pre
+        >
+      </section>
+
+      <section id="post-login">
+        <h2>POST /users/login</h2>
+        <p>Authenticates a user and returns JWT token.</p>
+        <h3>Example Request</h3>
+        <pre>
+{
+  "email": "john.smith@example.com",
   "password": "password123"
 }</pre
         >
@@ -83,76 +196,45 @@
         <pre>
 {
   "message": "Login successful",
-  "user": { "id": "USER_ID", "username": "giulia.verdi" },
-  "token": "JWT_TOKEN_HERE"
-}</pre
-        >
-      </section>
-
-      <section id="post-admin">
-        <h2>POST /users/admin</h2>
-        <p>Create a new admin user (requires admin token).</p>
-        <h3>Request Body</h3>
-        <pre>
-{
-  "name": "Luca Bianchi",
-  "username": "lucabianchi",
-  "email": "luca.bianchi@example.com",
-  "password": "securePass456",
-  "role": "admin",
-  "avatar": "https://example.com/avatar2.png",
-  "birthday": "1992-09-21",
-  "phone": "+39 9876543210",
-  "bio": "Event coordinator"
-}</pre
-        >
-        <h3>Example Response</h3>
-        <pre>
-{
   "user": {
-    "id": "NEW_USER_ID",
-    "username": "lucabianchi",
-    "role": "admin"
-  }
-}</pre
-        >
-      </section>
-
-      <section id="get-user">
-        <h2>GET /users/:id</h2>
-        <p>Retrieve a single user by ID.</p>
-        <h3>Example Request</h3>
-        <pre>{}</pre>
-        <h3>Example Response</h3>
-        <pre>
-{
-  "user": {
-    "id": "USER_ID",
-    "username": "giulia.verdi",
-    "name": "Giulia Verdi",
-    "email": "giulia.verdi@example.com"
-  }
+    "_id": "64f123abc456def789012345",
+    "name": "John Smith",
+    "username": "johnsmith",
+    "email": "john.smith@example.com",
+    "avatar": "https://example.com/avatar1.png",
+    "birthday": "1990-06-15",
+    "phone": "+1 555-123-4567",
+    "bio": "Software developer and coffee enthusiast.",
+    "events": ["68e555e6228fa4ad21af6704"]
+  },
+  "token": "JWT_TOKEN"
 }</pre
         >
       </section>
 
       <section id="patch-user">
         <h2>PATCH /users/:id</h2>
-        <p>Update a user's information (self or admin).</p>
-        <h3>Request Body</h3>
+        <p>Updates a user’s profile information (SELF or ADMIN only).</p>
+        <h3>Example Request</h3>
         <pre>
 {
-  "name": "Updated Name",
-  "bio": "Updated bio"
+  "bio": "Updated biography"
 }</pre
         >
         <h3>Example Response</h3>
         <pre>
 {
+  "message": "User successfully updated",
   "user": {
-    "id": "USER_ID",
-    "name": "Updated Name",
-    "bio": "Updated bio"
+    "_id": "64f123abc456def789012345",
+    "name": "John Smith",
+    "username": "johnsmith",
+    "email": "john.smith@example.com",
+    "avatar": "https://example.com/avatar1.png",
+    "birthday": "1990-06-15",
+    "phone": "+1 555-123-4567",
+    "bio": "Updated biography",
+    "events": ["68e555e6228fa4ad21af6704"]
   }
 }</pre
         >
@@ -160,20 +242,31 @@
 
       <section id="delete-user">
         <h2>DELETE /users/:id</h2>
-        <p>Delete a user (admin only).</p>
+        <p>Deletes a user (SELF or ADMIN only).</p>
         <h3>Example Request</h3>
         <pre>{}</pre>
         <h3>Example Response</h3>
         <pre>
 {
-  "message": "User deleted successfully"
+  "message": "User successfully deleted",
+  "user": {
+    "_id": "64f123abc456def789012345",
+    "name": "John Smith",
+    "username": "johnsmith",
+    "email": "john.smith@example.com",
+    "avatar": "https://example.com/avatar1.png",
+    "birthday": "1990-06-15",
+    "phone": "+1 555-123-4567",
+    "bio": "Software developer and coffee enthusiast.",
+    "events": ["68e555e6228fa4ad21af6704"]
+  }
 }</pre
         >
       </section>
 
       <section id="get-events">
         <h2>GET /events</h2>
-        <p>Retrieve all events.</p>
+        <p>Retrieves all available events.</p>
         <h3>Example Request</h3>
         <pre>{}</pre>
         <h3>Example Response</h3>
@@ -181,59 +274,95 @@
 {
   "events": [
     {
-      "id": "EVENT_ID",
-      "title": "Hackathon Open Source 2025",
+      "_id": "68e555e6228fa4ad21af6704",
+      "title": "Open Source Hackathon 2025",
+      "description": "Collaborative coding weekend.",
       "date": "2025-12-06",
-      "location": "WeMake, Milano",
-      "capacity": 200
+      "price": 0,
+      "location": "San Francisco, CA",
+      "image": "https://example.com/event1.png",
+      "capacity": 200,
+      "attendees": ["64f123abc456def789012345"],
+      "createdAt": "2025-10-07T16:30:00.128Z",
+      "updatedAt": "2025-10-07T16:30:00.128Z",
+      "__v": 0
+    },
+    {
+      "_id": "68e555e6228fa4ad21af6705",
+      "title": "Tech Summit 2025",
+      "description": "Annual event for developers and innovators.",
+      "date": "2025-09-15",
+      "price": 25,
+      "location": "Torino",
+      "image": "https://example.com/event2.png",
+      "capacity": 100,
+      "attendees": [],
+      "createdAt": "2025-10-07T16:35:00.128Z",
+      "updatedAt": "2025-10-07T16:35:00.128Z",
+      "__v": 0
     }
   ]
 }</pre
         >
       </section>
 
-      <section id="post-event">
-        <h2>POST /events</h2>
-        <p>Create a new event (admin only).</p>
-        <h3>Request Body</h3>
-        <pre>
-{
-  "title": "Hackathon Open Source 2025",
-  "description": "Collaborative open source weekend",
-  "date": "2025-12-06",
-  "price": 0,
-  "location": "WeMake, Milano",
-  "capacity": 200
-}</pre
-        >
-        <h3>Example Response</h3>
-        <pre>
-{
-  "event": {
-    "id": "EVENT_ID",
-    "title": "Hackathon Open Source 2025",
-    "date": "2025-12-06",
-    "location": "WeMake, Milano",
-    "capacity": 200
-  }
-}</pre
-        >
-      </section>
-
       <section id="get-event">
         <h2>GET /events/:id</h2>
-        <p>Retrieve a single event by ID.</p>
+        <p>Retrieves a single event by ID.</p>
         <h3>Example Request</h3>
         <pre>{}</pre>
         <h3>Example Response</h3>
         <pre>
 {
   "event": {
-    "id": "EVENT_ID",
-    "title": "Hackathon Open Source 2025",
+    "_id": "68e555e6228fa4ad21af6704",
+    "title": "Open Source Hackathon 2025",
+    "description": "Collaborative coding weekend.",
     "date": "2025-12-06",
-    "location": "WeMake, Milano",
-    "capacity": 200
+    "price": 0,
+    "location": "San Francisco, CA",
+    "image": "https://example.com/event1.png",
+    "capacity": 200,
+    "attendees": ["64f123abc456def789012345"],
+    "createdAt": "2025-10-07T16:30:00.128Z",
+    "updatedAt": "2025-10-07T16:30:00.128Z",
+    "__v": 0
+  }
+}</pre
+        >
+      </section>
+
+      <section id="post-event">
+        <h2>POST /events</h2>
+        <p>Creates a new event (ADMIN only).</p>
+        <h3>Example Request</h3>
+        <pre>
+{
+  "title": "Tech Summit 2025",
+  "description": "Annual event for developers and innovators.",
+  "date": "2025-09-15",
+  "price": 25,
+  "location": "Torino",
+  "capacity": 100
+}</pre
+        >
+        <h3>Example Response</h3>
+        <pre>
+{
+  "message": "Event successfully created",
+  "event": {
+    "_id": "68e555e6228fa4ad21af6705",
+    "title": "Tech Summit 2025",
+    "description": "Annual event for developers and innovators.",
+    "date": "2025-09-15",
+    "price": 25,
+    "location": "Torino",
+    "image": null,
+    "capacity": 100,
+    "attendees": [],
+    "createdAt": "2025-10-07T16:35:00.128Z",
+    "updatedAt": "2025-10-07T16:35:00.128Z",
+    "__v": 0
   }
 }</pre
         >
@@ -241,23 +370,31 @@
 
       <section id="patch-event">
         <h2>PATCH /events/:id</h2>
-        <p>Update an event (admin only).</p>
-        <h3>Request Body</h3>
+        <p>Updates an existing event (ADMIN only).</p>
+        <h3>Example Request</h3>
         <pre>
 {
   "title": "Hackathon Open Source 2026",
-  "description": "Updated description",
-  "date": "2026-12-06"
+  "description": "Updated event details"
 }</pre
         >
         <h3>Example Response</h3>
         <pre>
 {
+  "message": "Event successfully updated",
   "event": {
-    "id": "EVENT_ID",
+    "_id": "68e555e6228fa4ad21af6704",
     "title": "Hackathon Open Source 2026",
-    "description": "Updated description",
-    "date": "2026-12-06"
+    "description": "Updated event details",
+    "date": "2025-12-06",
+    "price": 0,
+    "location": "San Francisco, CA",
+    "image": "https://example.com/event1.png",
+    "capacity": 200,
+    "attendees": ["64f123abc456def789012345"],
+    "createdAt": "2025-10-07T16:30:00.128Z",
+    "updatedAt": "2025-10-07T16:40:00.128Z",
+    "__v": 0
   }
 }</pre
         >
@@ -265,28 +402,48 @@
 
       <section id="delete-event">
         <h2>DELETE /events/:id</h2>
-        <p>Delete an event (admin only).</p>
+        <p>Deletes an event (ADMIN only).</p>
         <h3>Example Request</h3>
         <pre>{}</pre>
         <h3>Example Response</h3>
         <pre>
 {
-  "message": "Event deleted successfully"
+  "message": "Event successfully deleted",
+  "event": {
+    "_id": "68e555e6228fa4ad21af6704",
+    "title": "Open Source Hackathon 2025",
+    "description": "Collaborative coding weekend.",
+    "date": "2025-12-06",
+    "price": 0,
+    "location": "San Francisco, CA",
+    "image": "https://example.com/event1.png",
+    "capacity": 200,
+    "attendees": ["64f123abc456def789012345"]
+  }
 }</pre
         >
       </section>
 
-      <section id="post-register">
+      <section id="post-register-event">
         <h2>POST /events/:id/register</h2>
-        <p>Register the current user for the event.</p>
+        <p>Registers the current authenticated user for the selected event.</p>
         <h3>Example Request</h3>
         <pre>{}</pre>
         <h3>Example Response</h3>
         <pre>
 {
-  "message": "User registered successfully",
-  "eventId": "EVENT_ID",
-  "userId": "USER_ID"
+  "message": "User successfully registered for event",
+  "event": {
+    "_id": "68e555e6228fa4ad21af6704",
+    "title": "Open Source Hackathon 2025",
+    "attendees": ["64f123abc456def789012345"]
+  },
+  "user": {
+    "_id": "64f123abc456def789012345",
+    "name": "John Smith",
+    "username": "johnsmith",
+    "events": ["68e555e6228fa4ad21af6704"]
+  }
 }</pre
         >
       </section>
