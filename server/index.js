@@ -20,8 +20,8 @@ app.use("/events", eventsRouter);
 app.use("/users", usersRouter);
 
 // Health check
-app.get("/ping", (req, res) => {
-  res.status(200).json({ status: "pong" });
+app.head("/ping", (req, res) => {
+  res.sendStatus(200);
 });
 
 // Database connection
