@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>DotComm</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <header>
+      <h1>DotComm</h1>
+      <nav>
+        <h2>Endpoints</h2>
+        <ul>
+          <li><a href="#get-root">GET /</a></li>
+          <li><a href="#get-users">GET /users</a></li>
+          <li><a href="#post-login">POST /users/login</a></li>
+          <li><a href="#post-admin">POST /users/admin</a></li>
+          <li><a href="#get-user">GET /users/:id</a></li>
+          <li><a href="#patch-user">PATCH /users/:id</a></li>
+          <li><a href="#delete-user">DELETE /users/:id</a></li>
+          <li><a href="#get-events">GET /events</a></li>
+          <li><a href="#post-event">POST /events</a></li>
+          <li><a href="#get-event">GET /events/:id</a></li>
+          <li><a href="#patch-event">PATCH /events/:id</a></li>
+          <li><a href="#delete-event">DELETE /events/:id</a></li>
+          <li><a href="#post-register">POST /events/:id/register</a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <main>
+      <section id="get-root">
+        <h2>GET /</h2>
+        <p>Returns a JSON object describing all available API endpoints.</p>
+        <h3>Example Request</h3>
+        <pre>{}</pre>
+        <h3>Example Response</h3>
+        <pre>
+{
+  "endpoints": {
+    "users": "/users",
+    "login": "/users/login",
+    "admin": "/users/admin",
+    "events": "/events",
+    "register": "/events/:id/register"
+  }
+}</pre
+        >
+      </section>
+
+      <section id="get-users">
+        <h2>GET /users</h2>
+        <p>Retrieves all registered users.</p>
+        <h3>Example Request</h3>
+        <pre>{}</pre>
+        <h3>Example Response</h3>
+        <pre>
+{
+  "users": [
+    {
+      "username": "giulia.verdi",
+      "name": "Giulia Verdi",
+      "email": "giulia.verdi@example.com",
+      "avatar": "https://example.com/avatar.png"
+    }
+  ]
+}</pre
+        >
+      </section>
+
+      <section id="post-login">
+        <h2>POST /users/login</h2>
+        <p>Login a user and receive a JWT token.</p>
+        <h3>Request Body</h3>
+        <pre>
+{
+  "email": "giulia.verdi@example.com",
+  "password": "password123"
+}</pre
+        >
+        <h3>Example Response</h3>
+        <pre>
+{
+  "message": "Login successful",
+  "user": { "id": "USER_ID", "username": "giulia.verdi" },
+  "token": "JWT_TOKEN_HERE"
+}</pre
+        >
+      </section>
+
+      <section id="post-admin">
+        <h2>POST /users/admin</h2>
+        <p>Create a new admin user (requires admin token).</p>
+        <h3>Request Body</h3>
+        <pre>
+{
+  "name": "Luca Bianchi",
+  "username": "lucabianchi",
+  "email": "luca.bianchi@example.com",
+  "password": "securePass456",
+  "role": "admin",
+  "avatar": "https://example.com/avatar2.png",
+  "birthday": "1992-09-21",
+  "phone": "+39 9876543210",
+  "bio": "Event coordinator"
+}</pre
+        >
+        <h3>Example Response</h3>
+        <pre>
+{
+  "user": {
+    "id": "NEW_USER_ID",
+    "username": "lucabianchi",
+    "role": "admin"
+  }
+}</pre
+        >
+      </section>
+
+      <section id="get-user">
+        <h2>GET /users/:id</h2>
+        <p>Retrieve a single user by ID.</p>
+        <h3>Example Request</h3>
+        <pre>{}</pre>
+        <h3>Example Response</h3>
+        <pre>
+{
+  "user": {
+    "id": "USER_ID",
+    "username": "giulia.verdi",
+    "name": "Giulia Verdi",
+    "email": "giulia.verdi@example.com"
+  }
+}</pre
+        >
+      </section>
+
+      <section id="patch-user">
+        <h2>PATCH /users/:id</h2>
+        <p>Update a user's information (self or admin).</p>
+        <h3>Request Body</h3>
+        <pre>
+{
+  "name": "Updated Name",
+  "bio": "Updated bio"
+}</pre
+        >
+        <h3>Example Response</h3>
+        <pre>
+{
+  "user": {
+    "id": "USER_ID",
+    "name": "Updated Name",
+    "bio": "Updated bio"
+  }
+}</pre
+        >
+      </section>
+
+      <section id="delete-user">
+        <h2>DELETE /users/:id</h2>
+        <p>Delete a user (admin only).</p>
+        <h3>Example Request</h3>
+        <pre>{}</pre>
+        <h3>Example Response</h3>
+        <pre>
+{
+  "message": "User deleted successfully"
+}</pre
+        >
+      </section>
+
+      <section id="get-events">
+        <h2>GET /events</h2>
+        <p>Retrieve all events.</p>
+        <h3>Example Request</h3>
+        <pre>{}</pre>
+        <h3>Example Response</h3>
+        <pre>
+{
+  "events": [
+    {
+      "id": "EVENT_ID",
+      "title": "Hackathon Open Source 2025",
+      "date": "2025-12-06",
+      "location": "WeMake, Milano",
+      "capacity": 200
+    }
+  ]
+}</pre
+        >
+      </section>
+
+      <section id="post-event">
+        <h2>POST /events</h2>
+        <p>Create a new event (admin only).</p>
+        <h3>Request Body</h3>
+        <pre>
+{
+  "title": "Hackathon Open Source 2025",
+  "description": "Collaborative open source weekend",
+  "date": "2025-12-06",
+  "price": 0,
+  "location": "WeMake, Milano",
+  "capacity": 200
+}</pre
+        >
+        <h3>Example Response</h3>
+        <pre>
+{
+  "event": {
+    "id": "EVENT_ID",
+    "title": "Hackathon Open Source 2025",
+    "date": "2025-12-06",
+    "location": "WeMake, Milano",
+    "capacity": 200
+  }
+}</pre
+        >
+      </section>
+
+      <section id="get-event">
+        <h2>GET /events/:id</h2>
+        <p>Retrieve a single event by ID.</p>
+        <h3>Example Request</h3>
+        <pre>{}</pre>
+        <h3>Example Response</h3>
+        <pre>
+{
+  "event": {
+    "id": "EVENT_ID",
+    "title": "Hackathon Open Source 2025",
+    "date": "2025-12-06",
+    "location": "WeMake, Milano",
+    "capacity": 200
+  }
+}</pre
+        >
+      </section>
+
+      <section id="patch-event">
+        <h2>PATCH /events/:id</h2>
+        <p>Update an event (admin only).</p>
+        <h3>Request Body</h3>
+        <pre>
+{
+  "title": "Hackathon Open Source 2026",
+  "description": "Updated description",
+  "date": "2026-12-06"
+}</pre
+        >
+        <h3>Example Response</h3>
+        <pre>
+{
+  "event": {
+    "id": "EVENT_ID",
+    "title": "Hackathon Open Source 2026",
+    "description": "Updated description",
+    "date": "2026-12-06"
+  }
+}</pre
+        >
+      </section>
+
+      <section id="delete-event">
+        <h2>DELETE /events/:id</h2>
+        <p>Delete an event (admin only).</p>
+        <h3>Example Request</h3>
+        <pre>{}</pre>
+        <h3>Example Response</h3>
+        <pre>
+{
+  "message": "Event deleted successfully"
+}</pre
+        >
+      </section>
+
+      <section id="post-register">
+        <h2>POST /events/:id/register</h2>
+        <p>Register the current user for the event.</p>
+        <h3>Example Request</h3>
+        <pre>{}</pre>
+        <h3>Example Response</h3>
+        <pre>
+{
+  "message": "User registered successfully",
+  "eventId": "EVENT_ID",
+  "userId": "USER_ID"
+}</pre
+        >
+      </section>
+    </main>
+
+    <footer>
+      <p>© 2025 - Giuseppe Bisignano | DotComm</p>
+    </footer>
+  </body>
+</html>
