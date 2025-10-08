@@ -19,9 +19,9 @@ app.use("/", express.static("public"));
 app.use("/events", eventsRouter);
 app.use("/users", usersRouter);
 
-// Root
-app.get("/", (req, res) => {
-  res.send("Server DotComm is now running");
+// Health check
+app.get("/ping", (req, res) => {
+  res.status(200).json({ status: "OKAY" });
 });
 
 // Database connection
