@@ -7,7 +7,9 @@ const getEvents = async (req, res) => {
     const events = await Event.find();
     res.json(events);
   } catch (err) {
-    res.status(500).json({ message: "Error fetching events", error: err });
+    res
+      .status(500)
+      .json({ message: "Error fetching events", error: err.message });
   }
 };
 
@@ -26,9 +28,10 @@ const getEventByID = async (req, res) => {
 
     res.json(event);
   } catch (err) {
-    res
-      .status(500)
-      .json({ message: `Error fetching event with ID: ${id}`, error: err });
+    res.status(500).json({
+      message: `Error fetching event with ID: ${id}`,
+      error: err.message,
+    });
   }
 };
 
@@ -40,14 +43,16 @@ const createEvent = async (req, res) => {
       .status(201)
       .json({ message: "Event successfully created", event: event });
   } catch (err) {
-    res.status(400).json({ message: "Error creating event", error: err });
+    res
+      .status(400)
+      .json({ message: "Error creating event", error: err.message });
   }
 };
 
 // POST /events/:id/register
 const registerUserToEvent = async (req, res) => {
   const { id: eventID } = req.params;
-  const { userID } = req.body;
+  const userID = req.user.id;
 
   try {
     const event = await Event.findById(eventID);
@@ -83,16 +88,18 @@ const registerUserToEvent = async (req, res) => {
       .status(200)
       .json({ message: "User successfully registered for event", event, user });
   } catch (err) {
-    res
-      .status(500)
-      .json({ message: "Error registering user for event", error: err });
+    res.status(500).json({
+      message: "Error registering user for event",
+      error: err.message,
+    });
   }
 };
 
 // PATCH /events/:id
 const patchEventByID = async (req, res) => {
   const { id } = req.params;
-  const updates = req.body;
+  const updates = { ...req.body };
+  console.log(updates);
 
   try {
     const event = await Event.findByIdAndUpdate(id, updates, {
@@ -110,9 +117,10 @@ const patchEventByID = async (req, res) => {
       .status(200)
       .json({ message: "Event successfully updated", event: event });
   } catch (err) {
-    res
-      .status(500)
-      .json({ message: `Error updating event with ID: ${id}`, error: err });
+    res.status(500).json({
+      message: `Error updating event with ID: ${id}`,
+      error: err.message,
+    });
   }
 };
 
@@ -129,11 +137,14 @@ const deleteEventByID = async (req, res) => {
         .json({ message: `Event with ID ${id} does not exist` });
     }
 
+    await User.updateMany({ events: id }, { $pull: { events: id } });
+
     res.status(200).json({ message: "Event successfully deleted", event });
   } catch (err) {
-    res
-      .status(500)
-      .json({ message: `Error deleting event with ID: ${id}`, error: err });
+    res.status(500).json({
+      message: `Error deleting event with ID: ${id}`,
+      error: err.message,
+    });
   }
 };
 
