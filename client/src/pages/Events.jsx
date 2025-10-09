@@ -25,10 +25,10 @@ function Events() {
   }, []);
 
   if (loading) return <p>Loading events...</p>;
-  if (error) return <p>Error loading events.</p>;
+  if (error) return <p>Error loading events</p>;
 
   return (
-    <>
+    <div>
       <h1>Events</h1>
       <ul>
         {events.map((event) => (
@@ -37,7 +37,7 @@ function Events() {
           </li>
         ))}
       </ul>
-    </>
+    </div>
   );
 }
 

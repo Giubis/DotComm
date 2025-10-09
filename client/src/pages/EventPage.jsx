@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+
 import { fetchEvent } from "../API";
 
 function EventPage() {
@@ -24,14 +25,16 @@ function EventPage() {
   }, [id]);
 
   if (loading) return <p>Loading...</p>;
+
   if (error) return <p>Error: {error}</p>;
+
   if (!event) return <p>Event not found</p>;
 
   return (
     <div>
       <h1>{event.title}</h1>
       <p>{event.description}</p>
-      <p>Date: {event.date}</p>
+      <p>Date: {new Date(event.date).toLocaleString()}</p>
       <p>Location: {event.location}</p>
       <p>Price: {event.price > 0 ? `$${event.price}` : "Free"}</p>
     </div>
