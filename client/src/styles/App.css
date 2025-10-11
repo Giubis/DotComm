@@ -7,3 +7,9 @@
   flex: 1;
   padding: 20px;
 }
+
+.swal2-input,
+.swal2-textarea {
+  width: 80%;
+  box-sizing: border-box;
+}

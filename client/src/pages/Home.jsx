@@ -1,3 +1,5 @@
+import { login } from "../utils/login";
+import { register } from "../utils/register";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -18,7 +20,11 @@ export default function Home() {
       try {
         const data = await fetchEvents();
 
-        setEvents(data.events);
+        const sortedArray = [
+          ...data.events.sort((a, b) => new Date(a.date) - new Date(b.date)),
+        ];
+
+        setEvents(sortedArray.slice(0, 10));
       } catch (err) {
         console.error(err);
         setError(err);
@@ -42,7 +48,7 @@ export default function Home() {
           miss any networking or learning opportunities.
         </p>
         <button onClick={() => navigate("/events")}>Browse all events</button>
-        <button onClick={() => navigate("/login")}>Login</button>
+        <button onClick={() => register()}>Sign up</button>
       </section>
 
       <section>
@@ -64,7 +70,7 @@ export default function Home() {
                 <button
                   onClick={() =>
                     navigate(
-                      isLoggedIn ? `/events/${event._id}/register` : "/login"
+                      isLoggedIn ? `/events/${event._id}/register` : login()
                     )
                   }
                 >

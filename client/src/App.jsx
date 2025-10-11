@@ -3,7 +3,6 @@ import { Route, Routes, useLocation } from "react-router-dom";
 import Events from "./pages/Events";
 import EventPage from "./pages/EventPage";
 import Home from "./pages/Home";
-import Login from "./pages/Login";
 import Sidebar from "./components/Sidebar";
 
 import "./styles/App.css";
@@ -23,8 +22,6 @@ export default function App() {
             <Route index element={<Events />} />
             <Route path=":id" element={<EventPage />} />
           </Route>
-
-          <Route path="/login" element={<Login />} />
         </Routes>
       </main>
     </div>

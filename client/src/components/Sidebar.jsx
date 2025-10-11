@@ -26,9 +26,6 @@ export default function Sidebar() {
           <li>
             <Link to="/events">Events</Link>
           </li>
-          <li>
-            <Link to="/login">Login</Link>
-          </li>
         </ul>
       </nav>
     </aside>

@@ -25,6 +25,7 @@ function Events() {
   }, []);
 
   if (loading) return <p>Loading events...</p>;
+
   if (error) return <p>Error loading events</p>;
 
   return (
