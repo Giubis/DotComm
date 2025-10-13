@@ -1,9 +1,9 @@
 import { loginUser } from "../API";
+import { logout } from "../utils/logout";
 import { register } from "./register";
-
 import Swal from "sweetalert2";
 
-export async function login() {
+export async function login(setUser) {
   const { value: formValues } = await Swal.fire({
     title: "Login",
     html: `
@@ -17,54 +17,56 @@ export async function login() {
     preConfirm: () => {
       const email = document.getElementById("swal-email").value;
       const password = document.getElementById("swal-password").value;
+
       if (!email || !password) {
-        Swal.showValidationMessage(`Please enter both email and password`);
+        Swal.showValidationMessage("Please enter both email and password");
         return false;
       }
       return { email, password };
     },
   });
 
-  if (formValues) {
-    Swal.fire({
-      title: "Logging in...",
-      allowOutsideClick: false,
-      didOpen: async () => {
-        Swal.showLoading();
+  if (!formValues) return;
 
-        try {
-          const result = await loginUser(formValues.email, formValues.password);
+  Swal.fire({
+    title: "Logging in...",
+    allowOutsideClick: false,
+    didOpen: async () => {
+      Swal.showLoading();
+      try {
+        const result = await loginUser(formValues.email, formValues.password);
 
-          Swal.close();
-          Swal.fire({
-            icon: "success",
-            title: "Welcome back!",
-            text: `Logged in as ${result.user.username}`,
-            timer: 2000,
-            showConfirmButton: false,
-          });
-        } catch (err) {
-          Swal.close();
+        sessionStorage.setItem("user", JSON.stringify(result.user));
+        sessionStorage.setItem("token", result.token);
 
-          const { isConfirmed, isDenied } = await Swal.fire({
-            icon: "error",
-            title: "Login failed",
-            text: err.message,
-            showDenyButton: true,
-            showConfirmButton: true,
-            confirmButtonText: "Register instead",
-            denyButtonText: "Forgot password?",
-          });
+        if (setUser) setUser(result.user);
 
-          if (isConfirmed) {
-            register(formValues.email, formValues.password);
-            console.log("Redirect to register");
-          } else if (isDenied) {
-            console.log("Redirect to password reset");
-          }
+        Swal.close();
+        Swal.fire({
+          icon: "success",
+          title: "Welcome back!",
+          text: `Logged in as ${result.user.username}`,
+          timer: 2000,
+          showConfirmButton: false,
+        });
+
+        setTimeout(() => logout(setUser, true), 60 * 60 * 1000);
+      } catch (err) {
+        Swal.close();
+
+        const { isConfirmed } = await Swal.fire({
+          icon: "error",
+          title: "Login failed",
+          text: err.message,
+          showConfirmButton: true,
+          confirmButtonText: "Register instead",
+        });
+
+        if (isConfirmed) {
+          register(formValues.email, formValues.password, setUser);
         }
-      },
-      showConfirmButton: false,
-    });
-  }
+      }
+    },
+    showConfirmButton: false,
+  });
 }

@@ -1,18 +1,20 @@
+import { fetchEventByID } from "../API";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
-import { fetchEvent } from "../API";
+import "../styles/EventPage.css";
 
 function EventPage() {
-  const { id } = useParams();
-  const [event, setEvent] = useState(null);
-  const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [event, setEvent] = useState(null);
+  const { id } = useParams();
+  const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const getEvent = async () => {
       try {
-        const data = await fetchEvent(id);
+        const data = await fetchEventByID(id);
         setEvent(data.event);
       } catch (err) {
         setError(err.message);
@@ -20,23 +22,47 @@ function EventPage() {
         setLoading(false);
       }
     };
-
     getEvent();
   }, [id]);
 
-  if (loading) return <p>Loading...</p>;
+  if (loading) {
+    return <p>Loading...</p>;
+  }
 
-  if (error) return <p>Error: {error}</p>;
+  if (error) {
+    return <p>Error: {error}</p>;
+  }
 
-  if (!event) return <p>Event not found</p>;
+  if (!event) {
+    return <p>Event not found</p>;
+  }
 
   return (
-    <div>
+    <div className="event-page">
+      <button className="back-button" onClick={() => navigate("/events")}>
+        ← Back to Events
+      </button>
+
       <h1>{event.title}</h1>
       <p>{event.description}</p>
-      <p>Date: {new Date(event.date).toLocaleString()}</p>
-      <p>Location: {event.location}</p>
-      <p>Price: {event.price > 0 ? `$${event.price}` : "Free"}</p>
+
+      <div className="event-details">
+        <div className="event-meta">
+          <p>
+            <strong>Date:</strong> {new Date(event.date).toLocaleString()}
+          </p>
+          <p>
+            <strong>Location:</strong> {event.location}
+          </p>
+          <p>
+            <strong>Price:</strong>{" "}
+            {event.price > 0 ? `$${event.price}` : "Free"}
+          </p>
+          <p>
+            <strong>Attendees:</strong> {event.attendees.length}
+          </p>
+        </div>
+      </div>
     </div>
   );
 }

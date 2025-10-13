@@ -1,18 +1,12 @@
 import { registerUser } from "../API";
-
 import Swal from "sweetalert2";
 
-export async function register(prefilledEmail, prefilledPassword) {
-  console.log(prefilledEmail);
+export async function register(prefilledEmail, prefilledPassword, setUser) {
   const { value: formValues } = await Swal.fire({
     title: "Register",
     html: `
-      <input id="swal-email" class="swal2-input" placeholder="Email" value="${
-        prefilledEmail || ""
-      }">
-      <input id="swal-password" type="password" class="swal2-input" placeholder="Password" value="${
-        prefilledPassword || ""
-      }">
+      <input id="swal-email" class="swal2-input" placeholder="Email" value="${prefilledEmail}">
+      <input id="swal-password" type="password" class="swal2-input" placeholder="Password" value="${prefilledPassword}">
       <input id="swal-name" class="swal2-input" placeholder="Name">
       <input id="swal-username" class="swal2-input" placeholder="Username">
       <input id="swal-avatar" class="swal2-input" placeholder="Avatar URL">
@@ -23,10 +17,10 @@ export async function register(prefilledEmail, prefilledPassword) {
     focusConfirm: false,
     confirmButtonText: "Register",
     preConfirm: () => {
-      const name = document.getElementById("swal-name").value;
-      const username = document.getElementById("swal-username").value;
       const email = document.getElementById("swal-email").value;
       const password = document.getElementById("swal-password").value;
+      const name = document.getElementById("swal-name").value;
+      const username = document.getElementById("swal-username").value;
       const avatar = document.getElementById("swal-avatar").value;
       const birthday = document.getElementById("swal-birthday").value;
       const phone = document.getElementById("swal-phone").value;
@@ -43,12 +37,22 @@ export async function register(prefilledEmail, prefilledPassword) {
     },
   });
 
-  if (formValues) {
-    try {
-      const result = await registerUser(formValues);
-      Swal.fire("Success!", `User ${result.username} registered.`, "success");
-    } catch (err) {
-      Swal.fire("Error", err.message, "error");
-    }
+  if (!formValues) return;
+
+  try {
+    const result = await registerUser(formValues);
+
+    sessionStorage.setItem("user", JSON.stringify(result.user));
+    sessionStorage.setItem("token", result.token);
+
+    if (setUser) setUser(result.user);
+
+    Swal.fire(
+      "Success!",
+      `User ${result.user.username} registered.`,
+      "success"
+    );
+  } catch (err) {
+    Swal.fire("Error", err.message, "error");
   }
 }

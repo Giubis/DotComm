@@ -6,10 +6,80 @@
 .main {
   flex: 1;
   padding: 20px;
+  text-align: center;
+}
+
+.loader {
+  margin-top: 5%;
+  width: 48px;
+  height: 48px;
+  border: 5px solid #fff;
+  border-bottom-color: #0077ff;
+  border-radius: 50%;
+  display: inline-block;
+  box-sizing: border-box;
+  animation: rotation 1s linear infinite;
+}
+
+@keyframes rotation {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.swal2-popup {
+  border-radius: 1rem !important;
+  padding: 2rem !important;
+  font-family: "Inter", sans-serif;
+}
+
+.swal2-title {
+  color: #0077ff !important;
+  font-weight: 700;
 }
 
 .swal2-input,
 .swal2-textarea {
-  width: 80%;
-  box-sizing: border-box;
+  border-radius: 0.5rem !important;
+  border: 1px solid #d0d7ff !important;
+  padding: 0.6rem 0.8rem !important;
+  width: 75% !important;
+  box-sizing: border-box !important;
+}
+
+.swal2-input:focus,
+.swal2-textarea:focus {
+  border-color: #0077ff !important;
+  box-shadow: 0 0 0 3px rgba(0, 119, 255, 0.2) !important;
+  outline: none !important;
+}
+
+.swal2-confirm {
+  background-color: #0077ff !important;
+  color: white !important;
+  border-radius: 0.5rem !important;
+  font-weight: 600 !important;
+  padding: 0.8rem 1.5rem !important;
+  transition: background 0.2s ease;
+}
+
+.swal2-confirm:hover {
+  background-color: #005fd4 !important;
+}
+
+.swal2-cancel {
+  border-radius: 0.5rem !important;
+  padding: 0.8rem 1.5rem !important;
+}
+
+.swal2-input[readonly],
+.swal2-textarea[readonly] {
+  background-color: #f2f2f2 !important;
+  color: #666 !important;
+  border: 1px solid #ccc !important;
+  cursor: not-allowed !important;
+  box-shadow: none !important;
 }
