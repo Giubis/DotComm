@@ -134,6 +134,10 @@ const createUser = async (req, res) => {
       token,
     });
   } catch (err) {
+    if (err.code === 11000 && err.keyPattern?.username) {
+      return res.status(400).json({ message: "Username already exists" });
+    }
+
     res.status(500).json({ message: "Registration error", error: err.message });
   }
 };
