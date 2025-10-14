@@ -2,6 +2,10 @@ import { login } from "./login";
 import Swal from "sweetalert2";
 
 export async function logout(setUser, setToken, sessionExpired = false) {
+  if (Swal.isVisible()) {
+    await Promise.resolve().then(Swal.close());
+  }
+
   if (setUser) setUser(null);
 
   if (setToken) setToken(null);
@@ -20,7 +24,7 @@ export async function logout(setUser, setToken, sessionExpired = false) {
       login(setUser, setToken);
     }
   } else {
-    Swal.fire({
+    await Swal.fire({
       icon: "success",
       title: "Logged out",
       text: "You have been logged out successfully",

@@ -15,18 +15,19 @@ export async function deleteUser(id, setUser) {
   });
 
   if (result.isDismissed) {
-    Swal.fire({
+    await Swal.fire({
       icon: "info",
       title: "Aborted",
       text: "Thanks for staying with us!",
       timer: 3000,
       showConfirmButton: false,
+      timerProgressBar: true,
     });
     return;
   }
 
   try {
-    Swal.fire({
+    await Swal.fire({
       title: "Deleting...",
       allowOutsideClick: false,
       didOpen: () => Swal.showLoading(),
@@ -50,7 +51,8 @@ export async function deleteUser(id, setUser) {
     window.location.href = "/";
   } catch (err) {
     Swal.close();
-    Swal.fire({
+
+    await Swal.fire({
       icon: "error",
       title: "Error",
       text: err.message,

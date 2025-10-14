@@ -15,7 +15,7 @@ import "../styles/Sidebar.css";
 export default function Sidebar() {
   const [myEvents, setMyEvents] = useState([]);
   const { user, setUser, token, setToken } = useContext(UserContext);
-  const { role } = parseJWT(token);
+  const { role } = parseJWT(token) || null;
 
   useEffect(() => {
     const getMyEvents = async () => {
@@ -89,7 +89,7 @@ export default function Sidebar() {
           </div>
         )}
 
-        {role === "admin" && (
+        {user && role === "admin" && (
           <div className="user-section">
             <hr />
             <br />
