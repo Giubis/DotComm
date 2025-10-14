@@ -1,18 +1,24 @@
+import { login } from "./login";
 import Swal from "sweetalert2";
 
-export function logout(setUser, sessionExpired = false) {
-  sessionStorage.clear();
-
+export async function logout(setUser, setToken, sessionExpired = false) {
   if (setUser) setUser(null);
 
+  if (setToken) setToken(null);
+
+  sessionStorage.clear();
+
   if (sessionExpired) {
-    Swal.fire({
+    const result = await Swal.fire({
       icon: "info",
       title: "Session expired",
       text: "Please login again",
-      timer: 3000,
-      showConfirmButton: false,
+      showConfirmButton: true,
     });
+
+    if (result.isConfirmed) {
+      login(setUser, setToken);
+    }
   } else {
     Swal.fire({
       icon: "success",

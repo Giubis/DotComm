@@ -1,3 +1,4 @@
+import { addToGoogleCalendar } from "./addToGoogleCalendar";
 import { registerUserToEvent } from "../API";
 import Swal from "sweetalert2";
 
@@ -16,19 +17,25 @@ export async function joinEvent(eventID, setUser) {
     if (!isConfirmed) return;
 
     const result = await registerUserToEvent(eventID);
+    console.log(result);
 
     if (setUser) {
       setUser(result.user);
       sessionStorage.setItem("user", JSON.stringify(result.user));
     }
 
-    Swal.fire({
+    const res = await Swal.fire({
       icon: "success",
       title: "Joined!",
       text: `${result.user.username} successfully joined the event`,
-      timer: 3000,
-      showConfirmButton: false,
+      confirmButtonText: "Add to Google Calendar",
+      showCancelButton: true,
+      cancelButtonText: "No, thanks",
     });
+
+    if (res.isConfirmed) {
+      window.open(addToGoogleCalendar(result.event), "_blank");
+    }
 
     return result;
   } catch (err) {

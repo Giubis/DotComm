@@ -51,7 +51,6 @@
   flex-direction: column;
   align-items: center;
   text-align: center;
-  gap: 0.8rem;
 }
 
 .user-section:empty {
@@ -66,7 +65,7 @@
   border: 2px solid #0077ff;
 }
 
-.user-info h3 {
+.user-section h3 {
   margin: 0.5rem;
   font-size: 1rem;
   font-weight: 600;
@@ -94,7 +93,6 @@
   width: 100%;
   border: none;
   border-top: 1px solid #ccc;
-  margin: 0.5rem 0;
 }
 
 .auth-section {

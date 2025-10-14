@@ -1,7 +1,13 @@
 import { registerUser } from "../API";
+import { startSessionTimer } from "./startSessionTimer";
 import Swal from "sweetalert2";
 
-export async function register(prefilledEmail, prefilledPassword, setUser) {
+export async function register(
+  prefilledEmail,
+  prefilledPassword,
+  setUser,
+  setToken
+) {
   const { value: formValues } = await Swal.fire({
     title: "Register",
     html: `
@@ -47,11 +53,15 @@ export async function register(prefilledEmail, prefilledPassword, setUser) {
 
     if (setUser) setUser(result.user);
 
+    if (setToken) setToken(result.token);
+
     Swal.fire(
       "Success!",
       `User ${result.user.username} registered.`,
       "success"
     );
+
+    startSessionTimer(setUser, result.token);
   } catch (err) {
     Swal.fire("Error", err.message, "error");
   }

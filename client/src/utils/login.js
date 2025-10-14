@@ -1,9 +1,9 @@
 import { loginUser } from "../API";
-import { logout } from "../utils/logout";
 import { register } from "./register";
+import { startSessionTimer } from "./startSessionTimer";
 import Swal from "sweetalert2";
 
-export async function login(setUser) {
+export async function login(setUser, setToken) {
   const { value: formValues } = await Swal.fire({
     title: "Login",
     html: `
@@ -41,7 +41,10 @@ export async function login(setUser) {
 
         if (setUser) setUser(result.user);
 
+        if (setToken) setToken(result.token);
+
         Swal.close();
+
         Swal.fire({
           icon: "success",
           title: "Welcome back!",
@@ -50,7 +53,7 @@ export async function login(setUser) {
           showConfirmButton: false,
         });
 
-        setTimeout(() => logout(setUser, true), 60 * 60 * 1000);
+        startSessionTimer(setUser, result.token);
       } catch (err) {
         Swal.close();
 

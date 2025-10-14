@@ -83,6 +83,28 @@ export async function patchUserByID(id, updates) {
   }
 }
 
+// Delete account by ID
+export async function deleteAccountByID(id) {
+  try {
+    const res = await fetch(`${API_URL}/users/${id}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+      },
+    });
+
+    if (!res.ok) {
+      const error = await res.json().catch(() => ({}));
+      throw new Error(error.message);
+    }
+
+    return await res.json();
+  } catch (err) {
+    throw new Error(err.message);
+  }
+}
+
 // Fetch all events
 export async function fetchEvents() {
   try {
