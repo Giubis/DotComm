@@ -1,4 +1,4 @@
-import { deleteAccountByID } from "../../API";
+import { deleteUserByID } from "../../API";
 import Swal from "sweetalert2";
 
 export async function deleteUser(id, setUser) {
@@ -33,7 +33,7 @@ export async function deleteUser(id, setUser) {
       didOpen: () => Swal.showLoading(),
     });
 
-    await deleteAccountByID(id);
+    await deleteUserByID(id);
 
     Swal.close();
 

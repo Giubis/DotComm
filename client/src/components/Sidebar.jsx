@@ -1,5 +1,5 @@
 import { deleteUser, editUser, login, logout, register } from "../utils/users";
-import { fetchEventByID } from "../API";
+import { getEventByID } from "../API";
 import { Link } from "react-router-dom";
 import { parseJWT } from "../utils/misc/parseJWT";
 import { showMyEvents } from "../utils/events";
@@ -21,7 +21,7 @@ export default function Sidebar() {
 
       try {
         const events = await Promise.all(
-          user.events.map((id) => fetchEventByID(id))
+          user.events.map((id) => getEventByID(id))
         );
 
         setMyEvents(events);

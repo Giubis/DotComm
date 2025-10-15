@@ -1,4 +1,4 @@
-import { login } from "./login";
+import { login } from "./";
 import Swal from "sweetalert2";
 
 export async function logout(setUser, setToken, sessionExpired = false) {

@@ -1,7 +1,8 @@
 const API_URL = import.meta.env.VITE_API_URL;
+const token = sessionStorage.getItem("token");
 
 // Fetch all users (ADMIN only)
-export async function fetchUsers() {
+export async function getUsers() {
   try {
     const res = await fetch(`${API_URL}/users`);
 
@@ -16,8 +17,46 @@ export async function fetchUsers() {
   }
 }
 
+// Fetch user by ID (ADMIN only)
+export async function getUserByID(id) {
+  try {
+    const res = await fetch(`${API_URL}/users/${id}`);
+
+    if (!res.ok) {
+      const error = await res.json().catch(() => ({}));
+      throw new Error(error.message);
+    }
+
+    return await res.json();
+  } catch (err) {
+    throw new Error(err.message);
+  }
+}
+
+// Register new staff member
+export async function createAdmin(user) {
+  try {
+    const res = await fetch(`${API_URL}/users/`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(user),
+    });
+
+    if (!res.ok) {
+      const error = await res.json().catch(() => ({}));
+      throw new Error(error.message);
+    }
+
+    return await res.json();
+  } catch (err) {
+    throw new Error(err.message);
+  }
+}
+
 // Register new user
-export async function registerUser(user) {
+export async function createUser(user) {
   try {
     const res = await fetch(`${API_URL}/users/register`, {
       method: "POST",
@@ -67,7 +106,7 @@ export async function patchUserByID(id, updates) {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+        Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify(updates),
     });
@@ -84,13 +123,13 @@ export async function patchUserByID(id, updates) {
 }
 
 // Delete account by ID
-export async function deleteAccountByID(id) {
+export async function deleteUserByID(id) {
   try {
     const res = await fetch(`${API_URL}/users/${id}`, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+        Authorization: `Bearer ${token}`,
       },
     });
 
@@ -106,7 +145,7 @@ export async function deleteAccountByID(id) {
 }
 
 // Fetch all events
-export async function fetchEvents() {
+export async function getEvents() {
   try {
     const res = await fetch(`${API_URL}/events`);
 
@@ -122,9 +161,54 @@ export async function fetchEvents() {
 }
 
 // Fetch single event by ID
-export async function fetchEventByID(id) {
+export async function getEventByID(id) {
   try {
     const res = await fetch(`${API_URL}/events/${id}`);
+
+    if (!res.ok) {
+      const error = await res.json().catch(() => ({}));
+      throw new Error(error.message);
+    }
+
+    return await res.json();
+  } catch (err) {
+    throw new Error(err.message);
+  }
+}
+
+// Create new event (ADMIN only)
+export async function createEvent(event) {
+  try {
+    const res = await fetch(`${API_URL}/events`, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(event),
+    });
+
+    if (!res.ok) {
+      const error = await res.json().catch(() => ({}));
+      throw new Error(error.message);
+    }
+
+    return await res.json();
+  } catch (err) {
+    throw new Error(err.message);
+  }
+}
+
+// Edit event by ID (ADMIN only)
+export async function patchEventByID(id, updates) {
+  try {
+    const res = await fetch(`${API_URL}/users/${id}`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(updates),
+    });
 
     if (!res.ok) {
       const error = await res.json().catch(() => ({}));
@@ -144,7 +228,7 @@ export async function registerUserToEvent(eventID) {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+        Authorization: `Bearer ${token}`,
       },
     });
 

@@ -1,4 +1,4 @@
-import { fetchEvents } from "../API";
+import { getEvents } from "../API";
 import { joinEvent, showEventDetails } from "../utils/events";
 import { login } from "../utils/users";
 import { useContext, useEffect, useState } from "react";
@@ -11,9 +11,9 @@ export default function EventsCard({ limit }) {
   const { user, setUser } = useContext(UserContext);
 
   useEffect(() => {
-    const getEvents = async () => {
+    const fetchEvents = async () => {
       try {
-        const data = await fetchEvents();
+        const data = await getEvents();
 
         const sortedArray = [
           ...data.events.sort((a, b) => new Date(a.date) - new Date(b.date)),
@@ -28,7 +28,7 @@ export default function EventsCard({ limit }) {
       }
     };
 
-    getEvents();
+    fetchEvents();
   }, [limit]);
 
   if (loading) {

@@ -1,4 +1,4 @@
-import { registerUser } from "../../API";
+import { createUser } from "../../API";
 import { startSessionTimer } from "../session/startSessionTimer";
 import Swal from "sweetalert2";
 
@@ -46,7 +46,7 @@ export async function register(
   if (!formValues) return;
 
   try {
-    const result = await registerUser(formValues);
+    const result = await createUser(formValues);
 
     sessionStorage.setItem("user", JSON.stringify(result.user));
     sessionStorage.setItem("token", result.token);

@@ -1,5 +1,5 @@
 import { loginUser } from "../../API";
-import { register } from "../users/register";
+import { register } from "../users";
 import { startSessionTimer } from "../session/startSessionTimer";
 import Swal from "sweetalert2";
 

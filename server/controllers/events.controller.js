@@ -49,57 +49,10 @@ const createEvent = async (req, res) => {
   }
 };
 
-// POST /events/:id/register
-const registerUserToEvent = async (req, res) => {
-  const { id: eventID } = req.params;
-  const userID = req.user.id;
-
-  try {
-    const event = await Event.findById(eventID);
-    const user = await User.findById(userID);
-
-    if (!event) {
-      return res
-        .status(404)
-        .json({ message: `Event with ID ${eventID} not found` });
-    }
-
-    if (!user) {
-      return res
-        .status(404)
-        .json({ message: `User with ID ${userID} not found` });
-    }
-
-    if (!event.attendees.includes(userID)) {
-      event.attendees.push(userID);
-      await event.save();
-    } else {
-      return res
-        .status(400)
-        .json({ message: "User already registered for this event" });
-    }
-
-    if (!user.events.includes(eventID)) {
-      user.events.push(eventID);
-      await user.save();
-    }
-
-    res
-      .status(200)
-      .json({ message: "User successfully registered for event", event, user });
-  } catch (err) {
-    res.status(500).json({
-      message: "Error registering user for event",
-      error: err.message,
-    });
-  }
-};
-
 // PATCH /events/:id
 const patchEventByID = async (req, res) => {
   const { id } = req.params;
   const updates = { ...req.body };
-  console.log(updates);
 
   try {
     const event = await Event.findByIdAndUpdate(id, updates, {
@@ -148,11 +101,57 @@ const deleteEventByID = async (req, res) => {
   }
 };
 
+// POST /events/:id/register
+const registerUserToEvent = async (req, res) => {
+  const { id: eventID } = req.params;
+  const userID = req.user.id;
+
+  try {
+    const event = await Event.findById(eventID);
+    const user = await User.findById(userID);
+
+    if (!event) {
+      return res
+        .status(404)
+        .json({ message: `Event with ID ${eventID} not found` });
+    }
+
+    if (!user) {
+      return res
+        .status(404)
+        .json({ message: `User with ID ${userID} not found` });
+    }
+
+    if (!event.attendees.includes(userID)) {
+      event.attendees.push(userID);
+      await event.save();
+    } else {
+      return res
+        .status(400)
+        .json({ message: "User already registered for this event" });
+    }
+
+    if (!user.events.includes(eventID)) {
+      user.events.push(eventID);
+      await user.save();
+    }
+
+    res
+      .status(200)
+      .json({ message: "User successfully registered for event", event, user });
+  } catch (err) {
+    res.status(500).json({
+      message: "Error registering user for event",
+      error: err.message,
+    });
+  }
+};
+
 module.exports = {
   getEvents,
   getEventByID,
   createEvent,
-  registerUserToEvent,
   patchEventByID,
   deleteEventByID,
+  registerUserToEvent,
 };

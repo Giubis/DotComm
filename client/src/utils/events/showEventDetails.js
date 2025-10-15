@@ -1,4 +1,4 @@
-import { fetchEventByID } from "../../API";
+import { getEventByID } from "../../API";
 import Swal from "sweetalert2";
 
 const fallbackPicture =
@@ -6,7 +6,7 @@ const fallbackPicture =
 
 export async function showEventDetails(eventID) {
   try {
-    const { event } = await fetchEventByID(eventID);
+    const { event } = await getEventByID(eventID);
 
     await Swal.fire({
       icon: "info",
