@@ -40,7 +40,7 @@ const getUserByID = async (req, res) => {
   }
 };
 
-// POST /users
+// POST /admin
 const createAdmin = async (req, res) => {
   try {
     const { name, username, email, password, ...rest } = req.body;
@@ -61,6 +61,8 @@ const createAdmin = async (req, res) => {
       role: "admin",
       ...rest,
     });
+
+    console.log(user); // TEST
 
     const token = jwt.sign(
       { id: user._id, role: user.role },
