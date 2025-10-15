@@ -62,8 +62,6 @@ const createAdmin = async (req, res) => {
       ...rest,
     });
 
-    console.log(user); // TEST
-
     const token = jwt.sign(
       { id: user._id, role: user.role },
       process.env.JWT_SECRET,
@@ -87,6 +85,10 @@ const createAdmin = async (req, res) => {
       token,
     });
   } catch (err) {
+    if (err.code === 11000 && err.keyPattern?.username) {
+      return res.status(400).json({ message: "Username already exists" });
+    }
+
     res.status(500).json({ message: "Registration error", error: err.message });
   }
 };
