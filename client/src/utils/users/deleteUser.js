@@ -1,4 +1,4 @@
-import { deleteAccountByID } from "../API";
+import { deleteAccountByID } from "../../API";
 import Swal from "sweetalert2";
 
 export async function deleteUser(id, setUser) {

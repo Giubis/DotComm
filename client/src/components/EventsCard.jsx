@@ -1,6 +1,6 @@
 import { fetchEvents } from "../API";
-import { joinEvent } from "../utils/joinEvent";
-import { login } from "../utils/login";
+import { joinEvent } from "../utils/events/joinEvent";
+import { login } from "../utils/users/login";
 import { useContext, useEffect, useState } from "react";
 import UserContext from "../contexts/UserContext";
 import { useNavigate } from "react-router-dom";

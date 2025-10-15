@@ -1,5 +1,5 @@
 import { addToGoogleCalendar } from "./addToGoogleCalendar";
-import { registerUserToEvent } from "../API";
+import { registerUserToEvent } from "../../API";
 import Swal from "sweetalert2";
 
 export async function joinEvent(eventID, setUser) {

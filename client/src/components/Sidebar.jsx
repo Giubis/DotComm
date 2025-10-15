@@ -1,12 +1,12 @@
-import { deleteUser } from "../utils/deleteUser";
-import { editUser } from "../utils/editUser";
+import { deleteUser } from "../utils/users/deleteUser";
+import { editUser } from "../utils/users/editUser";
 import { fetchEventByID } from "../API";
 import { Link } from "react-router-dom";
-import { login } from "../utils/login";
-import { logout } from "../utils/logout";
-import { parseJWT } from "../utils/parseJWT";
-import { register } from "../utils/register";
-import { showMyEvents } from "../utils/showMyEvents";
+import { login } from "../utils/users/login";
+import { logout } from "../utils/users/logout";
+import { parseJWT } from "../utils/misc/parseJWT";
+import { register } from "../utils/users/register";
+import { showMyEvents } from "../utils/events/showMyEvents";
 import { useContext, useEffect, useState } from "react";
 import UserContext from "../contexts/UserContext";
 

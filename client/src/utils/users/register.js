@@ -1,5 +1,5 @@
-import { registerUser } from "../API";
-import { startSessionTimer } from "./startSessionTimer";
+import { registerUser } from "../../API";
+import { startSessionTimer } from "../session/startSessionTimer";
 import Swal from "sweetalert2";
 
 export async function register(

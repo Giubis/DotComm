@@ -1,4 +1,4 @@
-import { patchUserByID } from "../API";
+import { patchUserByID } from "../../API";
 import Swal from "sweetalert2";
 
 export async function editUser(id, user, setUser) {

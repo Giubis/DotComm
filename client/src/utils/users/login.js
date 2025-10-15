@@ -1,6 +1,6 @@
-import { loginUser } from "../API";
-import { register } from "./register";
-import { startSessionTimer } from "./startSessionTimer";
+import { loginUser } from "../../API";
+import { register } from "../users/register";
+import { startSessionTimer } from "../session/startSessionTimer";
 import Swal from "sweetalert2";
 
 export async function login(setUser, setToken) {

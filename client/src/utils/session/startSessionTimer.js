@@ -1,5 +1,5 @@
-import { logout } from "./logout";
-import { parseJWT } from "./parseJWT";
+import { logout } from "../users/logout";
+import { parseJWT } from "../misc/parseJWT";
 
 export function startSessionTimer(setUser, token) {
   const { expiry } = parseJWT(token) || {};
