@@ -10,7 +10,10 @@ export function showMyEvents(myEvents) {
             ({ event }) =>
               `<li><strong>${event.title}</strong><br /><small>${new Date(
                 event.date
-              ).toLocaleString()}</small></li><hr />`
+              ).toLocaleString(undefined, {
+                dateStyle: "medium",
+                timeStyle: "short",
+              })}</small></li><hr />`
           )
           .join("")}</ul>`
       : "<p>You haven’t joined any events yet</p>",

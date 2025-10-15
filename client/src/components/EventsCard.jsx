@@ -1,15 +1,14 @@
 import { fetchEvents } from "../API";
 import { joinEvent } from "../utils/events/joinEvent";
 import { login } from "../utils/users/login";
+import { showEventDetails } from "../utils/events/showEventDetails";
 import { useContext, useEffect, useState } from "react";
 import UserContext from "../contexts/UserContext";
-import { useNavigate } from "react-router-dom";
 
 export default function EventsCard({ limit }) {
   const [error, setError] = useState(null);
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
-  const navigate = useNavigate();
   const { user, setUser } = useContext(UserContext);
 
   useEffect(() => {
@@ -54,7 +53,7 @@ export default function EventsCard({ limit }) {
               <p className="event-description">{event.description}</p>
             </div>
             <div className="event-actions">
-              <button onClick={() => navigate(`/events/${event._id}`)}>
+              <button onClick={() => showEventDetails(event._id)}>
                 View Details
               </button>
               <button
