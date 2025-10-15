@@ -1,7 +1,6 @@
 import { fetchEvents } from "../API";
-import { joinEvent } from "../utils/events/joinEvent";
-import { login } from "../utils/users/login";
-import { showEventDetails } from "../utils/events/showEventDetails";
+import { joinEvent, showEventDetails } from "../utils/events";
+import { login } from "../utils/users";
 import { useContext, useEffect, useState } from "react";
 import UserContext from "../contexts/UserContext";
 

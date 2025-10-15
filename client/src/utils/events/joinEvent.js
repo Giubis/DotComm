@@ -17,7 +17,6 @@ export async function joinEvent(eventID, setUser) {
     if (!isConfirmed) return;
 
     const result = await registerUserToEvent(eventID);
-    console.log(result);
 
     if (setUser) {
       setUser(result.user);
