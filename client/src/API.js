@@ -1,10 +1,11 @@
 const API_URL = import.meta.env.VITE_API_URL;
-const token = sessionStorage.getItem("token");
 
-// Fetch all users (ADMIN only)
+// Get all users (ADMIN only)
 export async function getUsers() {
   try {
-    const res = await fetch(`${API_URL}/users`);
+    const res = await fetch(`${API_URL}/users`, {
+      headers: { Authorization: `Bearer ${sessionStorage.getItem("token")}` },
+    });
 
     if (!res.ok) {
       const error = await res.json().catch(() => ({}));
@@ -17,10 +18,12 @@ export async function getUsers() {
   }
 }
 
-// Fetch user by ID (ADMIN only)
+// Get user by ID (ADMIN only)
 export async function getUserByID(id) {
   try {
-    const res = await fetch(`${API_URL}/users/${id}`);
+    const res = await fetch(`${API_URL}/users/${id}`, {
+      headers: { Authorization: `Bearer ${sessionStorage.getItem("token")}` },
+    });
 
     if (!res.ok) {
       const error = await res.json().catch(() => ({}));
@@ -33,13 +36,14 @@ export async function getUserByID(id) {
   }
 }
 
-// Register new staff member
+// Create new staff member (ADMIN only)
 export async function createAdmin(user) {
   try {
-    const res = await fetch(`${API_URL}/users/`, {
+    const res = await fetch(`${API_URL}/users/admin`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${sessionStorage.getItem("token")}`,
       },
       body: JSON.stringify(user),
     });
@@ -55,7 +59,7 @@ export async function createAdmin(user) {
   }
 }
 
-// Register new user
+// Create new user
 export async function createUser(user) {
   try {
     const res = await fetch(`${API_URL}/users/register`, {
@@ -106,7 +110,7 @@ export async function patchUserByID(id, updates) {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${sessionStorage.getItem("token")}`,
       },
       body: JSON.stringify(updates),
     });
@@ -129,7 +133,7 @@ export async function deleteUserByID(id) {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${sessionStorage.getItem("token")}`,
       },
     });
 
@@ -144,7 +148,7 @@ export async function deleteUserByID(id) {
   }
 }
 
-// Fetch all events
+// Get all events
 export async function getEvents() {
   try {
     const res = await fetch(`${API_URL}/events`);
@@ -160,7 +164,7 @@ export async function getEvents() {
   }
 }
 
-// Fetch single event by ID
+// Get single event by ID
 export async function getEventByID(id) {
   try {
     const res = await fetch(`${API_URL}/events/${id}`);
@@ -182,7 +186,7 @@ export async function createEvent(event) {
     const res = await fetch(`${API_URL}/events`, {
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${sessionStorage.getItem("token")}`,
       },
       body: JSON.stringify(event),
     });
@@ -201,11 +205,11 @@ export async function createEvent(event) {
 // Edit event by ID (ADMIN only)
 export async function patchEventByID(id, updates) {
   try {
-    const res = await fetch(`${API_URL}/users/${id}`, {
+    const res = await fetch(`${API_URL}/events/${id}`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${sessionStorage.getItem("token")}`,
       },
       body: JSON.stringify(updates),
     });
@@ -228,7 +232,7 @@ export async function registerUserToEvent(eventID) {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${sessionStorage.getItem("token")}`,
       },
     });
 

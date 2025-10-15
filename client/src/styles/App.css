@@ -57,6 +57,17 @@
   outline: none !important;
 }
 
+.swal2-select {
+  border-radius: 0.5rem;
+  border: 1px solid #d0d7ff;
+  padding: 0.6rem 0.8rem;
+  width: 75%;
+  box-sizing: border-box;
+  font-family: "Inter", sans-serif;
+  background-color: white;
+  color: #333;
+}
+
 .swal2-confirm {
   background-color: #0077ff !important;
   color: white !important;

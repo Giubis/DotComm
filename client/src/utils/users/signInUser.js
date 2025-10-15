@@ -1,9 +1,9 @@
 import { loginUser } from "../../API";
-import { register } from "../users";
+import { signUpUser } from ".";
 import { startSessionTimer } from "../session/startSessionTimer";
 import Swal from "sweetalert2";
 
-export async function login(setUser, setToken) {
+export async function signInUser(setUser, setToken) {
   const { value: formValues } = await Swal.fire({
     title: "Login",
     html: `
@@ -66,7 +66,7 @@ export async function login(setUser, setToken) {
         });
 
         if (isConfirmed) {
-          register(formValues.email, formValues.password, setUser);
+          signUpUser(formValues.email, formValues.password, setUser);
         }
       }
     },

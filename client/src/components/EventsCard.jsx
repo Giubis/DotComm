@@ -1,6 +1,6 @@
 import { getEvents } from "../API";
 import { joinEvent, showEventDetails } from "../utils/events";
-import { login } from "../utils/users";
+import { signInUser } from "../utils/users";
 import { useContext, useEffect, useState } from "react";
 import UserContext from "../contexts/UserContext";
 
@@ -57,7 +57,7 @@ export default function EventsCard({ limit }) {
               </button>
               <button
                 onClick={() =>
-                  user ? joinEvent(event._id, setUser) : login(setUser)
+                  user ? joinEvent(event._id, setUser) : signInUser(setUser)
                 }
               >
                 Join

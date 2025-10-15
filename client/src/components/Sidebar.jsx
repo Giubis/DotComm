@@ -1,4 +1,12 @@
-import { deleteUser, editUser, login, logout, register } from "../utils/users";
+import {
+  deleteUser,
+  editProfile,
+  findUser,
+  signInUser,
+  signOutUser,
+  signUpAdmin,
+  signUpUser,
+} from "../utils/users";
 import { getEventByID } from "../API";
 import { Link } from "react-router-dom";
 import { parseJWT } from "../utils/misc/parseJWT";
@@ -54,8 +62,10 @@ export default function Sidebar() {
           <div className="auth-section">
             <hr />
             <br />
-            <button onClick={() => login(setUser, setToken)}>Sign in</button>
-            <button onClick={() => register("", "", setUser, setToken)}>
+            <button onClick={() => signInUser(setUser, setToken)}>
+              Sign in
+            </button>
+            <button onClick={() => signUpUser("", "", setUser, setToken)}>
               Sign up
             </button>
           </div>
@@ -74,14 +84,16 @@ export default function Sidebar() {
               className="user-avatar"
             />
             <h3>{user.username}</h3>
-            <button onClick={() => editUser(user._id, user, setUser)}>
+            <button onClick={() => editProfile(user._id, user, setUser)}>
               Edit profile
             </button>
             <button onClick={() => showMyEvents(myEvents)}>My events</button>
             <button onClick={() => deleteUser(user._id, setUser)}>
               Delete account
             </button>
-            <button onClick={() => logout(setUser, setToken)}>Logout</button>
+            <button onClick={() => signOutUser(setUser, setToken)}>
+              Logout
+            </button>
           </div>
         )}
 
@@ -89,11 +101,11 @@ export default function Sidebar() {
           <div className="user-section">
             <hr />
             <br />
-            <button>Create staff</button>
-            <button>Edit user</button>
-            <button>Delete user</button>
-            <button>Create event</button>
-            <button>Edit event</button>
+            <button onClick={() => signUpAdmin()}>Create staff</button>
+            <button onClick={() => findUser()}>Edit user</button>
+            <button onClick={() => {}}>Delete user</button>
+            <button onClick={() => {}}>Create event</button>
+            <button onClick={() => {}}>Edit event</button>
           </div>
         )}
       </aside>

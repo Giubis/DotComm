@@ -1,18 +1,12 @@
-import { createUser } from "../../API";
-import { startSessionTimer } from "../session/startSessionTimer";
+import { createAdmin } from "../../API";
 import Swal from "sweetalert2";
 
-export async function register(
-  prefilledEmail,
-  prefilledPassword,
-  setUser,
-  setToken
-) {
+export async function signUpAdmin() {
   const { value: formValues } = await Swal.fire({
-    title: "Register",
+    title: "Create staff",
     html: `
-      <input id="swal-email" class="swal2-input" placeholder="Email" value="${prefilledEmail}">
-      <input id="swal-password" type="password" class="swal2-input" placeholder="Password" value="${prefilledPassword}">
+      <input id="swal-email" class="swal2-input" placeholder="Email">
+      <input id="swal-password" type="password" class="swal2-input" placeholder="Password">
       <input id="swal-name" class="swal2-input" placeholder="Name">
       <input id="swal-username" class="swal2-input" placeholder="Username">
       <input id="swal-avatar" class="swal2-input" placeholder="Avatar URL">
@@ -21,7 +15,7 @@ export async function register(
       <textarea id="swal-bio" class="swal2-textarea" placeholder="Bio"></textarea>
     `,
     focusConfirm: false,
-    confirmButtonText: "Register",
+    confirmButtonText: "Create",
     preConfirm: () => {
       const email = document.getElementById("swal-email").value;
       const password = document.getElementById("swal-password").value;
@@ -46,22 +40,9 @@ export async function register(
   if (!formValues) return;
 
   try {
-    const result = await createUser(formValues);
+    const result = await createAdmin(formValues);
 
-    sessionStorage.setItem("user", JSON.stringify(result.user));
-    sessionStorage.setItem("token", result.token);
-
-    if (setUser) setUser(result.user);
-
-    if (setToken) setToken(result.token);
-
-    Swal.fire(
-      "Success!",
-      `User ${result.user.username} registered.`,
-      "success"
-    );
-
-    startSessionTimer(setUser, result.token);
+    Swal.fire("Success!", `User ${result.user.username} registered`, "success");
   } catch (err) {
     Swal.fire("Error", err.message, "error");
   }

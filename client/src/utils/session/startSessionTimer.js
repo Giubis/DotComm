@@ -1,11 +1,11 @@
-import { logout } from "../users/logout";
+import { signOutUser } from "../users/signOutUser";
 import { parseJWT } from "../misc/parseJWT";
 
 export function startSessionTimer(setUser, token) {
   const { expiry } = parseJWT(token) || {};
 
   if (!expiry) {
-    logout(setUser, null, true);
+    signOutUser(setUser, null, true);
     return;
   }
 
@@ -13,7 +13,7 @@ export function startSessionTimer(setUser, token) {
     const now = Math.floor(new Date().getTime() / 1000);
 
     if (now >= expiry) {
-      logout(setUser, null, true);
+      signOutUser(setUser, null, true);
       return;
     }
 

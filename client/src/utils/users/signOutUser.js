@@ -1,7 +1,7 @@
-import { login } from "./";
+import { signInUser } from ".";
 import Swal from "sweetalert2";
 
-export async function logout(setUser, setToken, sessionExpired = false) {
+export async function signOutUser(setUser, setToken, sessionExpired = false) {
   if (Swal.isVisible()) {
     await Promise.resolve().then(Swal.close());
   }
@@ -21,7 +21,7 @@ export async function logout(setUser, setToken, sessionExpired = false) {
     });
 
     if (result.isConfirmed) {
-      login(setUser, setToken);
+      signInUser(setUser, setToken);
     }
   } else {
     await Swal.fire({
