@@ -7,7 +7,6 @@ export async function editUser(id) {
   try {
     ({ user } = await getUserByID(id));
   } catch (err) {
-    console.error(err.message);
     Swal.fire({
       icon: "error",
       title: "Error",
@@ -17,7 +16,7 @@ export async function editUser(id) {
   }
 
   const { value: formValues } = await Swal.fire({
-    title: "Edit User",
+    title: "Edit user",
     html: `
       <input id="swal-email" class="swal2-input" placeholder="Email" value="${
         user.email || ""

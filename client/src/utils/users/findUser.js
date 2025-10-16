@@ -39,7 +39,7 @@ export async function findUser() {
     `;
 
     await Swal.fire({
-      title: "Find User",
+      title: "Find user",
       html: `
         <input 
           id="user-search" 

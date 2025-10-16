@@ -10,7 +10,7 @@ import {
 import { getEventByID } from "../API";
 import { Link } from "react-router-dom";
 import { parseJWT } from "../utils/misc/parseJWT";
-import { showMyEvents } from "../utils/events";
+import { addEvent, findEvent, showMyEvents } from "../utils/events";
 import { useContext, useEffect, useState } from "react";
 import UserContext from "../contexts/UserContext";
 
@@ -103,8 +103,8 @@ export default function Sidebar() {
             <br />
             <button onClick={() => signUpAdmin()}>Create staff</button>
             <button onClick={() => findUser()}>Edit user</button>
-            <button onClick={() => {}}>Create event</button>
-            <button onClick={() => {}}>Edit event</button>
+            <button onClick={() => addEvent()}>Create event</button>
+            <button onClick={() => findEvent(role)}>Edit event</button>
           </div>
         )}
       </aside>

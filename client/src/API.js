@@ -184,6 +184,7 @@ export async function getEventByID(id) {
 export async function createEvent(event) {
   try {
     const res = await fetch(`${API_URL}/events`, {
+      method: "POST",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${sessionStorage.getItem("token")}`,
@@ -212,6 +213,28 @@ export async function patchEventByID(id, updates) {
         Authorization: `Bearer ${sessionStorage.getItem("token")}`,
       },
       body: JSON.stringify(updates),
+    });
+
+    if (!res.ok) {
+      const error = await res.json().catch(() => ({}));
+      throw new Error(error.message);
+    }
+
+    return await res.json();
+  } catch (err) {
+    throw new Error(err.message);
+  }
+}
+
+// Delete event by ID
+export async function deleteEventByID(id) {
+  try {
+    const res = await fetch(`${API_URL}/events/${id}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+      },
     });
 
     if (!res.ok) {

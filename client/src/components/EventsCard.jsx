@@ -1,5 +1,6 @@
 import { getEvents } from "../API";
 import { joinEvent, showEventDetails } from "../utils/events";
+import { parseJWT } from "../utils/misc/parseJWT";
 import { signInUser } from "../utils/users";
 import { useContext, useEffect, useState } from "react";
 import UserContext from "../contexts/UserContext";
@@ -8,7 +9,8 @@ export default function EventsCard({ limit }) {
   const [error, setError] = useState(null);
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
-  const { user, setUser } = useContext(UserContext);
+  const { user, setUser, token } = useContext(UserContext);
+  const { role } = parseJWT(token) || null;
 
   useEffect(() => {
     const fetchEvents = async () => {
@@ -52,7 +54,7 @@ export default function EventsCard({ limit }) {
               <p className="event-description">{event.description}</p>
             </div>
             <div className="event-actions">
-              <button onClick={() => showEventDetails(event._id)}>
+              <button onClick={() => showEventDetails(event._id, role)}>
                 View Details
               </button>
               <button

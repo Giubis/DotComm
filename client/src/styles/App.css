@@ -82,8 +82,22 @@
 }
 
 .swal2-cancel {
+  font-weight: 600 !important;
   border-radius: 0.5rem !important;
   padding: 0.8rem 1.5rem !important;
+}
+
+.swal2-deny {
+  background-color: #ff4d4f !important;
+  color: white !important;
+  border-radius: 0.5rem !important;
+  font-weight: 600 !important;
+  padding: 0.8rem 1.5rem !important;
+  transition: background 0.2s ease;
+}
+
+.swal2-deny:hover {
+  background-color: #d9363e !important;
 }
 
 .swal2-input[readonly],
