@@ -1,4 +1,5 @@
 export * from "./deleteProfile";
+export * from "./deleteUser";
 export * from "./editProfile";
 export * from "./editUser";
 export * from "./findUser";

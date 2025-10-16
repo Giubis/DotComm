@@ -1,4 +1,4 @@
-import { editUser } from "./";
+import { deleteUser, editUser } from "../users";
 import { getUsers } from "../../API";
 import Swal from "sweetalert2";
 
@@ -15,7 +15,6 @@ export async function findUser() {
       });
     }
 
-    // Funzione che genera l’elenco
     const renderList = (list) => `
       <ul style="list-style:none; padding:0; text-align:left; max-height:300px; overflow:auto;">
         ${list
@@ -39,7 +38,6 @@ export async function findUser() {
       </ul>
     `;
 
-    // Mostra SweetAlert
     await Swal.fire({
       title: "Find User",
       html: `
@@ -60,7 +58,6 @@ export async function findUser() {
         const input = document.getElementById("user-search");
         const results = document.getElementById("user-results");
 
-        // 🔍 Ricerca live
         input.addEventListener("input", (e) => {
           const q = e.target.value.toLowerCase().trim();
           const filtered = users.filter(
@@ -73,7 +70,6 @@ export async function findUser() {
             : "<p>No matching users</p>";
         });
 
-        // 🖱️ Listener per click su user
         results.addEventListener("click", (e) => {
           const item = e.target.closest(".user-item");
           if (item) {
@@ -90,7 +86,6 @@ export async function findUser() {
   }
 }
 
-// 🔹 Mostra i dettagli di un utente in un nuovo popup
 async function showUserDetails(user) {
   const result = await Swal.fire({
     title: user.name,
@@ -102,14 +97,18 @@ async function showUserDetails(user) {
       <p><strong>Bio:</strong> ${user.bio || "No bio"}</p>
     `,
     showConfirmButton: true,
+    showDenyButton: true,
     showCancelButton: true,
     confirmButtonText: "Edit",
     cancelButtonText: "Cancel",
+    denyButtonText: "Delete account",
   });
 
-  // ✅ aspetta la risposta e controlla se l’utente ha cliccato "Edit"
   if (result.isConfirmed) {
-    console.log(user._id);
     editUser(user._id);
+  }
+
+  if (result.isDenied) {
+    deleteUser(user._id);
   }
 }

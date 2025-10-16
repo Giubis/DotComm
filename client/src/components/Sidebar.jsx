@@ -1,11 +1,11 @@
 import {
-  deleteUser,
+  deleteProfile,
   editProfile,
   findUser,
   signInUser,
   signOutUser,
-  signUpAdmin,
   signUpUser,
+  signUpAdmin,
 } from "../utils/users";
 import { getEventByID } from "../API";
 import { Link } from "react-router-dom";
@@ -88,7 +88,7 @@ export default function Sidebar() {
               Edit profile
             </button>
             <button onClick={() => showMyEvents(myEvents)}>My events</button>
-            <button onClick={() => deleteUser(user._id, setUser)}>
+            <button onClick={() => deleteProfile(user._id, setUser)}>
               Delete account
             </button>
             <button onClick={() => signOutUser(setUser, setToken)}>
@@ -103,7 +103,6 @@ export default function Sidebar() {
             <br />
             <button onClick={() => signUpAdmin()}>Create staff</button>
             <button onClick={() => findUser()}>Edit user</button>
-            <button onClick={() => {}}>Delete user</button>
             <button onClick={() => {}}>Create event</button>
             <button onClick={() => {}}>Edit event</button>
           </div>
