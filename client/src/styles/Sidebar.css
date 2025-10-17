@@ -63,6 +63,7 @@
   align-items: center;
   gap: 0.8rem;
   width: 100%;
+  font-family: "Oswald", sans-serif;
 }
 
 .user-avatar {
@@ -93,6 +94,7 @@
   border-radius: 0.5rem;
   background-color: #0a84ff;
   color: #fff;
+  font-family: "Oswald", sans-serif;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.2s ease;
