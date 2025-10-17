@@ -7,7 +7,7 @@ export function showMyEvents(myEvents) {
     html: myEvents.length
       ? `<ul style="list-style:none; padding:0;">${myEvents
           .map(
-            ({ event }) =>
+            (event) =>
               `<li><strong>${event.title}</strong><br /><small>${new Date(
                 event.date
               ).toLocaleString(undefined, {

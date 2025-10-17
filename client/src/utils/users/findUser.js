@@ -2,16 +2,24 @@ import { deleteUser, editUser } from "../users";
 import { getUsers } from "../../API";
 import Swal from "sweetalert2";
 
-export async function findUser() {
+export async function findUser(id) {
   try {
-    const { users } = await getUsers();
+    Swal.fire({
+      title: "Getting users...",
+      allowOutsideClick: false,
+      didOpen: () => Swal.showLoading(),
+      showConfirmButton: false,
+    });
 
-    if (!Array.isArray(users) || users.length === 0) {
+    const { users } = await getUsers();
+    const otherUsers = users.filter((loggedUser) => loggedUser._id !== id);
+
+    if (!Array.isArray(otherUsers) || otherUsers.length === 0) {
       return Swal.fire({
         icon: "info",
         title: "Users",
         html: "<p>No users found</p>",
-        confirmButtonText: "OK",
+        showConfirmButton: true,
       });
     }
 
@@ -19,17 +27,15 @@ export async function findUser() {
       <ul style="list-style:none; padding:0; text-align:left; max-height:300px; overflow:auto;">
         ${list
           .map(
-            (u) => `
+            (user) => `
             <li 
               class="user-item" 
-              data-id="${u._id}" 
+              data-id="${user._id}" 
               style="margin-bottom:10px; cursor:pointer; padding:5px; border-radius:6px;"
-              onmouseover="this.style.background='#f0f0f0'"
-              onmouseout="this.style.background='transparent'"
             >
-              <strong>${u.name}</strong> 
-              <small>(${u.username})</small><br/>
-              <small>ID: ${u._id}</small>
+              <strong>${user.name}</strong> 
+              <small>(${user.username})</small><br/>
+              <small>ID: ${user._id}</small>
             </li>
             <hr/>
           `
@@ -48,7 +54,7 @@ export async function findUser() {
           style="margin-bottom:15px;"
         />
         <div id="user-results">
-          ${renderList(users)}
+          ${renderList(otherUsers)}
         </div>
       `,
       showConfirmButton: true,
@@ -58,31 +64,38 @@ export async function findUser() {
         const input = document.getElementById("user-search");
         const results = document.getElementById("user-results");
 
-        input.addEventListener("input", (e) => {
-          const q = e.target.value.toLowerCase().trim();
-          const filtered = users.filter(
-            (u) =>
-              u.name.toLowerCase().includes(q) ||
-              u.username.toLowerCase().includes(q)
+        input.addEventListener("input", (event) => {
+          const query = event.target.value.toLowerCase().trim();
+          const filtered = otherUsers.filter(
+            (user) =>
+              user.name.toLowerCase().includes(query) ||
+              user.username.toLowerCase().includes(query)
           );
           results.innerHTML = filtered.length
             ? renderList(filtered)
             : "<p>No matching users</p>";
         });
 
-        results.addEventListener("click", (e) => {
-          const item = e.target.closest(".user-item");
+        results.addEventListener("click", (event) => {
+          const item = event.target.closest(".user-item");
+
           if (item) {
-            const userId = item.getAttribute("data-id");
-            const user = users.find((u) => u._id === userId);
-            if (user) showUserDetails(user);
+            const userID = item.getAttribute("data-id");
+            const user = otherUsers.find((user) => user._id === userID);
+
+            if (user) {
+              showUserDetails(user);
+            }
           }
         });
       },
     });
   } catch (err) {
-    console.error(err);
-    Swal.fire("Error", err.message || "Failed to load users", "error");
+    Swal.fire({
+      icon: "error",
+      title: "Error",
+      text: err.message,
+    });
   }
 }
 
@@ -97,8 +110,8 @@ async function showUserDetails(user) {
       <p><strong>Bio:</strong> ${user.bio || "No bio"}</p>
     `,
     showConfirmButton: true,
-    showDenyButton: true,
     showCancelButton: true,
+    showDenyButton: true,
     confirmButtonText: "Edit",
     cancelButtonText: "Cancel",
     denyButtonText: "Delete account",

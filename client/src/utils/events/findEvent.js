@@ -1,17 +1,14 @@
 import { showEventDetails } from "../events";
-import { getEvents } from "../../API";
 import Swal from "sweetalert2";
 
-export async function findEvent(role) {
+export async function findEvent(role, events, setEvents) {
   try {
-    const { events } = await getEvents();
-
     if (!Array.isArray(events) || events.length === 0) {
       return Swal.fire({
         icon: "info",
         title: "Events",
         html: "<p>No events found</p>",
-        confirmButtonText: "OK",
+        showConfirmButton: true,
       });
     }
 
@@ -24,8 +21,6 @@ export async function findEvent(role) {
               class="event-item" 
               data-id="${event._id}" 
               style="margin-bottom:10px; cursor:pointer; padding:5px; border-radius:6px;"
-              onmouseover="this.style.background='#f0f0f0'"
-              onmouseout="this.style.background='transparent'"
             >
               <strong>${event.title}</strong> 
               <small>(${event.date})</small><br/>
@@ -75,13 +70,18 @@ export async function findEvent(role) {
           if (item) {
             const eventID = item.getAttribute("data-id");
             const event = events.find((event) => event._id === eventID);
-            if (event) showEventDetails(eventID, role);
+            if (event) {
+              showEventDetails(role, setEvents, eventID);
+            }
           }
         });
       },
     });
   } catch (err) {
-    console.error(err);
-    Swal.fire("Error", err.message || "Failed to load events", "error");
+    Swal.fire({
+      icon: "error",
+      title: "Error",
+      text: err.message,
+    });
   }
 }

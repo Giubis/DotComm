@@ -2,17 +2,16 @@ import { jwtDecode } from "jwt-decode";
 
 export function parseJWT(token) {
   if (!token) {
-    return { role: null, expiry: null };
+    return { id: null, role: null, expiry: null };
   }
 
   try {
     const decoded = jwtDecode(token);
 
-    const expiryDate = decoded.exp || null;
-
     return {
+      id: decoded.id || null,
       role: decoded.role || null,
-      expiry: expiryDate,
+      expiry: decoded.exp || null,
     };
   } catch (err) {
     throw new Error(err.message);

@@ -2,13 +2,13 @@ import { signInUser } from ".";
 import Swal from "sweetalert2";
 
 export async function signOutUser(setUser, setToken, sessionExpired = false) {
-  if (Swal.isVisible()) {
-    await Promise.resolve().then(Swal.close());
+  if (setUser) {
+    setUser(null);
   }
 
-  if (setUser) setUser(null);
-
-  if (setToken) setToken(null);
+  if (setToken) {
+    setToken(null);
+  }
 
   sessionStorage.clear();
 
@@ -26,10 +26,11 @@ export async function signOutUser(setUser, setToken, sessionExpired = false) {
   } else {
     await Swal.fire({
       icon: "success",
-      title: "Logged out",
-      text: "You have been logged out successfully",
+      title: "Signed out",
+      text: "You have been signed out successfully",
       timer: 3000,
       showConfirmButton: false,
+      timerProgressBar: true,
     });
   }
 }

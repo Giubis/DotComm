@@ -1,7 +1,7 @@
 import { createEvent } from "../../API";
 import Swal from "sweetalert2";
 
-export async function addEvent() {
+export async function addEvent(events, setEvents) {
   const { value: formValues } = await Swal.fire({
     title: "Add Event",
     html: `
@@ -32,10 +32,12 @@ export async function addEvent() {
         Swal.showValidationMessage("Title and Date are mandatory");
         return false;
       }
+
       if (price && parseFloat(price) < 0) {
         Swal.showValidationMessage("Price must be a positive number");
         return false;
       }
+
       if (capacity && parseInt(capacity) < 0) {
         Swal.showValidationMessage("Capacity must be a positive number");
         return false;
@@ -57,12 +59,14 @@ export async function addEvent() {
 
   try {
     Swal.fire({
-      title: "Creating event...",
+      title: "Creating...",
       allowOutsideClick: false,
       didOpen: () => Swal.showLoading(),
     });
 
     const result = await createEvent(formValues);
+
+    setEvents([...events, result.event]);
 
     Swal.close();
 
@@ -78,7 +82,7 @@ export async function addEvent() {
     Swal.fire({
       icon: "error",
       title: "Error",
-      text: err.message || "Failed to create event",
+      text: err.message,
     });
   }
 }

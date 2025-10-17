@@ -14,7 +14,16 @@ export async function joinEvent(eventID, setUser) {
       cancelButtonText: "No",
     });
 
-    if (!isConfirmed) return;
+    if (!isConfirmed) {
+      return;
+    }
+
+    Swal.fire({
+      title: "Joining...",
+      allowOutsideClick: false,
+      didOpen: () => Swal.showLoading(),
+      showConfirmButton: false,
+    });
 
     const result = await registerUserToEvent(eventID);
 
@@ -27,13 +36,31 @@ export async function joinEvent(eventID, setUser) {
       icon: "success",
       title: "Joined!",
       text: `${result.user.username} successfully joined the event`,
-      confirmButtonText: "Add to Google Calendar",
+      confirmButtonText: "Add to Google calendar",
       showCancelButton: true,
       cancelButtonText: "No, thanks",
     });
 
     if (res.isConfirmed) {
-      window.open(addToGoogleCalendar(result.event), "_blank");
+      try {
+        Swal.fire({
+          title: "Redirecting to Google...",
+          allowOutsideClick: false,
+          didOpen: () => Swal.showLoading(),
+          showConfirmButton: false,
+        });
+
+        setTimeout(() => {
+          Swal.close();
+          window.open(addToGoogleCalendar(result.event), "_blank");
+        }, 3000);
+      } catch (err) {
+        Swal.fire({
+          icon: "error",
+          title: "Error",
+          text: err.message,
+        });
+      }
     }
 
     return result;

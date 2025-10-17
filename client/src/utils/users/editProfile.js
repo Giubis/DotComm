@@ -1,5 +1,6 @@
 import { patchUserByID } from "../../API";
 import Swal from "sweetalert2";
+import { validatePassword, validateURL } from "../misc";
 
 export async function editProfile(id, user, setUser) {
   const { value: formValues } = await Swal.fire({
@@ -39,6 +40,18 @@ export async function editProfile(id, user, setUser) {
       const phone = document.getElementById("swal-phone").value;
       const bio = document.getElementById("swal-bio").value;
 
+      if (password && !validatePassword(password)) {
+        Swal.showValidationMessage(
+          "Password must be 8-20 chars, include uppercase, lowercase, number and special char"
+        );
+        return false;
+      }
+
+      if (avatar && !validateURL(avatar)) {
+        Swal.showValidationMessage("Please enter a valid URL for the avatar");
+        return false;
+      }
+
       const updates = { avatar, birthday, phone, bio };
 
       if (password) updates.password = password;
@@ -49,6 +62,13 @@ export async function editProfile(id, user, setUser) {
 
   if (formValues) {
     try {
+      Swal.fire({
+        title: "Saving...",
+        allowOutsideClick: false,
+        didOpen: () => Swal.showLoading(),
+        showConfirmButton: false,
+      });
+
       const result = await patchUserByID(id, formValues);
 
       sessionStorage.setItem("user", JSON.stringify(result.user));

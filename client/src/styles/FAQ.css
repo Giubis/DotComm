@@ -1,0 +1,112 @@
+.faq-container {
+  max-width: 900px;
+  margin: 3rem auto;
+  padding: 0 1.5rem;
+}
+
+.faq-hero {
+  position: relative;
+  height: 50vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: url("https://p-news-upload.storage.googleapis.com/2025/05/GettyImages-1201842276-scaled.jpg")
+    center/cover no-repeat;
+  border-radius: 1.5rem;
+  overflow: hidden;
+  margin-bottom: 3rem;
+}
+
+.faq-hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(30, 30, 30, 0.6);
+  z-index: 1;
+}
+
+.faq-hero h1 {
+  position: relative;
+  z-index: 2;
+  color: #fff;
+  font-family: "Oswald", sans-serif;
+  font-size: 3rem;
+  font-weight: 700;
+  text-align: center;
+}
+
+.faq-list {
+  list-style: none;
+  padding: 0;
+}
+
+.faq-item {
+  background-color: #1e1e1e;
+  color: #fff;
+  margin-bottom: 1rem;
+  border-radius: 1rem;
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+  transition: transform 0.2s ease;
+}
+
+.faq-item:hover {
+  transform: translateY(-2px);
+}
+
+.faq-item button {
+  width: 100%;
+  text-align: left;
+  padding: 1rem 1.5rem;
+  background: transparent;
+  border: none;
+  color: #0a84ff;
+  font-family: "Oswald", sans-serif;
+  font-size: 1.2rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.faq-item button .arrow {
+  transition: transform 0.3s ease;
+}
+
+.faq-item.active button .arrow {
+  transform: rotate(90deg);
+}
+
+.faq-item .answer-wrapper {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s ease, padding 0.4s ease;
+  padding: 0 1.5rem;
+}
+
+.faq-item.active .answer-wrapper {
+  max-height: 500px;
+  padding: 1rem 1.5rem;
+}
+
+.faq-item .answer {
+  color: #ccc;
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+@media (max-width: 768px) {
+  .faq-hero {
+    height: 40vh;
+  }
+  .faq-hero h1 {
+    font-size: 2.2rem;
+  }
+  .faq-item button {
+    font-size: 1rem;
+  }
+  .faq-item .answer {
+    font-size: 0.95rem;
+  }
+}

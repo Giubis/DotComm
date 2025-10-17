@@ -43,6 +43,7 @@ export async function deleteUser(id) {
       text: "This account has been successfully deleted",
       timer: 3000,
       showConfirmButton: false,
+      timerProgressBar: true,
     });
   } catch (err) {
     Swal.close();

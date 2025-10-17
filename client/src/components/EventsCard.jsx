@@ -1,64 +1,53 @@
-import { getEvents } from "../API";
+import EventsContext from "../contexts/EventsContext";
 import { joinEvent, showEventDetails } from "../utils/events";
 import { parseJWT } from "../utils/misc/parseJWT";
 import { signInUser } from "../utils/users";
-import { useContext, useEffect, useState } from "react";
+import Swal from "sweetalert2";
+import { useContext, useEffect, useMemo, useState } from "react";
 import UserContext from "../contexts/UserContext";
 
 import "../styles/EventsCard.css";
 
 export default function EventsCard() {
-  const [events, setEvents] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [query, setQuery] = useState("");
+  const { events, setEvents, loading, error } = useContext(EventsContext);
   const { user, setUser, token } = useContext(UserContext);
+  const [query, setQuery] = useState("");
 
-  const { role } = parseJWT(token) || null;
+  const { role } = parseJWT(token) || {};
+
+  const now = useMemo(() => new Date(), []);
 
   useEffect(() => {
-    const fetchEvents = async () => {
-      try {
-        const { events } = await getEvents();
-        const sorted = events.sort(
-          (a, b) => new Date(a.date) - new Date(b.date)
-        );
-        setEvents(sorted);
-      } catch (err) {
-        console.error(err);
-        setError(err);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchEvents();
-  }, []);
+    if (error) {
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: error.message,
+      });
+    }
+  }, [error]);
 
-  const now = new Date();
+  const filteredEvents = useMemo(() => {
+    return events
+      .filter(
+        (event) =>
+          event.title.toLowerCase().includes(query.toLowerCase().trim()) ||
+          (event.description || "")
+            .toLowerCase()
+            .includes(query.toLowerCase().trim())
+      )
+      .sort((a, b) => new Date(a.date) - new Date(b.date));
+  }, [events, query]);
 
-  const filteredEvents = events.filter(
-    (event) =>
-      event.title.toLowerCase().includes(query.toLowerCase().trim()) ||
-      (event.description || "")
-        .toLowerCase()
-        .includes(query.toLowerCase().trim())
+  const upcomingEvents = useMemo(
+    () => filteredEvents.filter((event) => new Date(event.date) >= now),
+    [filteredEvents, now]
   );
 
-  const upcomingEvents = filteredEvents.filter(
-    (event) => new Date(event.date) >= now
+  const pastEvents = useMemo(
+    () => filteredEvents.filter((event) => new Date(event.date) < now),
+    [filteredEvents, now]
   );
-
-  const pastEvents = filteredEvents.filter(
-    (event) => new Date(event.date) < now
-  );
-
-  if (loading) {
-    return <span className="loader"></span>;
-  }
-
-  if (error) {
-    return <p>Failed to load events</p>;
-  }
 
   const renderEventCard = (event, isPast = false) => {
     const eventDate = new Date(event.date);
@@ -69,33 +58,30 @@ export default function EventsCard() {
       Math.max(0, (remainingDays / totalDays) * 100)
     );
 
-    let countdownColor = "#0affaa";
+    let countdownColor;
 
     if (!isPast) {
-      if (remainingDays > 20) {
-        countdownColor = "#0affaa";
-      } else if (remainingDays > 10) {
-        countdownColor = "#ff9f0a";
-      } else {
-        countdownColor = "#ff3b30";
-      }
+      if (remainingDays > 20) countdownColor = "#0affaa";
+      else if (remainingDays > 10) countdownColor = "#ff9f0a";
+      else countdownColor = "#ff3b30";
     }
 
     return (
       <div key={event._id} className="event-card">
-        {event.image && (
-          <div
-            className="event-image"
-            style={{ backgroundImage: `url(${event.image})` }}
+        <div className="event-image">
+          <img
+            src={event.image || "/event.gif"}
+            alt={event.title || "Event"}
+            onError={(e) => (e.currentTarget.src = "/event.gif")}
           />
-        )}
+        </div>
         <div className="event-info">
           <h3>{event.title}</h3>
           <p className="event-date">{eventDate.toLocaleString()}</p>
           <p className="event-description">{event.description}</p>
         </div>
         <div className="event-actions">
-          <button onClick={() => showEventDetails(event._id, role)}>
+          <button onClick={() => showEventDetails(role, setEvents, event._id)}>
             View Details
           </button>
           {!isPast && (
@@ -118,6 +104,14 @@ export default function EventsCard() {
     );
   };
 
+  if (loading) {
+    return (
+      <div className="loader-wrapper">
+        <span className="loader"></span>
+      </div>
+    );
+  }
+
   return (
     <section className="events-section">
       <input
@@ -126,23 +120,30 @@ export default function EventsCard() {
         value={query}
         onChange={(event) => setQuery(event.target.value)}
       />
-      {upcomingEvents.length > 0 && (
+
+      {filteredEvents.length === 0 ? (
+        <p className="no-events">No events found for "{query}"</p>
+      ) : (
         <>
-          <h2>Upcoming Events</h2>
-          <div className="events-grid">
-            {upcomingEvents.map((event) => renderEventCard(event))}
-          </div>
+          {upcomingEvents.length > 0 && (
+            <>
+              <h2>Upcoming Events</h2>
+              <div className="events-grid">
+                {upcomingEvents.map((event) => renderEventCard(event))}
+              </div>
+            </>
+          )}
+
+          {pastEvents.length > 0 && (
+            <>
+              <h2>Past Events</h2>
+              <div className="events-grid">
+                {pastEvents.map((event) => renderEventCard(event, true))}
+              </div>
+            </>
+          )}
         </>
       )}
-      {pastEvents.length > 0 && (
-        <>
-          <h2>Past Events</h2>
-          <div className="events-grid">
-            {pastEvents.map((event) => renderEventCard(event, true))}
-          </div>
-        </>
-      )}
-      {filteredEvents.length === 0 && <p>No events found</p>}
     </section>
   );
 }

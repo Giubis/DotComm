@@ -1,16 +1,24 @@
 import { getUserByID, patchUserByID } from "../../API";
 import Swal from "sweetalert2";
+import { validateEmail, validatePassword, validateURL } from "../misc";
 
 export async function editUser(id) {
   let user;
 
   try {
+    Swal.fire({
+      title: "Getting user...",
+      allowOutsideClick: false,
+      didOpen: () => Swal.showLoading(),
+      showConfirmButton: false,
+    });
+
     ({ user } = await getUserByID(id));
   } catch (err) {
     Swal.fire({
       icon: "error",
       title: "Error",
-      text: err.message || "Failed to fetch user",
+      text: err.message,
     });
     return;
   }
@@ -64,6 +72,23 @@ export async function editUser(id) {
       const phone = document.getElementById("swal-phone").value;
       const bio = document.getElementById("swal-bio").value;
 
+      if (!validateEmail(email)) {
+        Swal.showValidationMessage("Please enter a valid email");
+        return false;
+      }
+
+      if (password && !validatePassword(password)) {
+        Swal.showValidationMessage(
+          "Password must be 8-20 chars, include uppercase, lowercase, number and special char"
+        );
+        return false;
+      }
+
+      if (avatar && !validateURL(avatar)) {
+        Swal.showValidationMessage("Please enter a valid URL for the avatar");
+        return false;
+      }
+
       const updates = {
         email,
         name,
@@ -74,6 +99,7 @@ export async function editUser(id) {
         phone,
         bio,
       };
+
       if (password) updates.password = password;
 
       return updates;
@@ -82,6 +108,13 @@ export async function editUser(id) {
 
   if (formValues) {
     try {
+      Swal.fire({
+        title: "Editing...",
+        allowOutsideClick: false,
+        didOpen: () => Swal.showLoading(),
+        showConfirmButton: false,
+      });
+
       await patchUserByID(id, formValues);
 
       Swal.fire({
@@ -93,7 +126,7 @@ export async function editUser(id) {
       Swal.fire({
         icon: "error",
         title: "Error",
-        text: err.message || "Failed to update user",
+        text: err.message,
       });
     }
   }

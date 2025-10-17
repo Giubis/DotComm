@@ -1,7 +1,7 @@
 import { deleteEventByID } from "../../API";
 import Swal from "sweetalert2";
 
-export async function deleteEvent(id) {
+export async function deleteEvent(ID, setEvents) {
   const result = await Swal.fire({
     icon: "warning",
     title: "Are you sure?",
@@ -14,7 +14,7 @@ export async function deleteEvent(id) {
     },
   });
 
-  if (result.isDismissed) {
+  if (!result.isConfirmed) {
     await Swal.fire({
       icon: "info",
       title: "Aborted",
@@ -33,7 +33,11 @@ export async function deleteEvent(id) {
   });
 
   try {
-    await deleteEventByID(id);
+    await deleteEventByID(ID);
+
+    setEvents((previousEvents) =>
+      previousEvents.filter((event) => event._id !== ID)
+    );
 
     Swal.close();
 
@@ -46,7 +50,6 @@ export async function deleteEvent(id) {
     });
   } catch (err) {
     Swal.close();
-
     await Swal.fire({
       icon: "error",
       title: "Error",

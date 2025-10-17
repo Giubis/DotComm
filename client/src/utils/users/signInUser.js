@@ -28,48 +28,47 @@ export async function signInUser(setUser, setToken) {
 
   if (!formValues) return;
 
-  Swal.fire({
-    title: "Logging in...",
-    allowOutsideClick: false,
-    didOpen: async () => {
-      Swal.showLoading();
-      try {
-        const result = await loginUser(formValues.email, formValues.password);
+  try {
+    Swal.fire({
+      title: "Signin in...",
+      allowOutsideClick: false,
+      didOpen: () => Swal.showLoading(),
+      showConfirmButton: false,
+    });
 
-        sessionStorage.setItem("user", JSON.stringify(result.user));
-        sessionStorage.setItem("token", result.token);
+    const result = await loginUser(formValues.email, formValues.password);
 
-        if (setUser) setUser(result.user);
+    sessionStorage.setItem("user", JSON.stringify(result.user));
+    sessionStorage.setItem("token", result.token);
 
-        if (setToken) setToken(result.token);
+    if (setUser) setUser(result.user);
+    if (setToken) setToken(result.token);
 
-        Swal.close();
+    Swal.close();
 
-        Swal.fire({
-          icon: "success",
-          title: "Welcome back!",
-          text: `Logged in as ${result.user.username}`,
-          timer: 2000,
-          showConfirmButton: false,
-        });
+    Swal.fire({
+      icon: "success",
+      title: "Welcome back!",
+      text: `Logged in as ${result.user.username}`,
+      timer: 3000,
+      showConfirmButton: false,
+      timerProgressBar: true,
+    });
 
-        startSessionTimer(setUser, result.token);
-      } catch (err) {
-        Swal.close();
+    startSessionTimer(setUser, result.token);
+  } catch (err) {
+    Swal.close();
 
-        const { isConfirmed } = await Swal.fire({
-          icon: "error",
-          title: "Login failed",
-          text: err.message,
-          showConfirmButton: true,
-          confirmButtonText: "Register instead",
-        });
+    const { isConfirmed } = await Swal.fire({
+      icon: "error",
+      title: "Login failed",
+      text: err.message,
+      showConfirmButton: true,
+      confirmButtonText: "Register instead",
+    });
 
-        if (isConfirmed) {
-          signUpUser(formValues.email, formValues.password, setUser);
-        }
-      }
-    },
-    showConfirmButton: false,
-  });
+    if (isConfirmed) {
+      signUpUser(formValues.email, formValues.password, setUser);
+    }
+  }
 }

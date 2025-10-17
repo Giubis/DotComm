@@ -3,30 +3,34 @@ import { editEvent } from "./editEvent";
 import { deleteEvent } from "./deleteEvent";
 import Swal from "sweetalert2";
 
-const fallbackPicture =
-  "https://media.istockphoto.com/id/1785808259/photo/networking-opportunities.jpg?s=612x612&w=0&k=20&c=pgrB3Py2KJaOmohj7wRYmIg0frjgSC0nXBBfbDb-HH4=";
+export async function showEventDetails(role, setEvents, eventID) {
+  if (!eventID) {
+    return Swal.fire({
+      icon: "error",
+      title: "Error",
+      text: "Event ID is missing",
+    });
+  }
 
-export async function showEventDetails(eventID, role) {
   try {
     const { event } = await getEventByID(eventID);
     const isAdmin = role === "admin";
 
     await Swal.fire({
+      customClass: {
+        popup: "swal2-popup",
+        title: "swal2-title",
+        confirmButton: "swal2-confirm",
+        cancelButton: "swal2-cancel",
+        denyButton: "swal2-deny",
+      },
       icon: "info",
       title: event.title || "Event Details",
       html: `
-        <ul style="list-style:none; padding:0; margin:0; justify-content:center">
-          <li style="margin-bottom:20px; width:200px; height:200px; border-radius:50%; border:1px solid black; overflow:hidden; position:relative; display:inline-flex; align-items:center; justify-content:center;">
-            <div id="img-loader" class="loader" style="position:absolute;"></div>
-            <img id="event-img"
-              src="${event.image}"
-              alt="Event picture"
-              style="width:100%; height:100%; object-fit:cover; display:none; border-radius:50%;"
-              onload="document.getElementById('img-loader').style.display='none'; this.style.display='block';"
-              onerror="this.onerror=null; this.src='${fallbackPicture}';">
+        <ul class="swal-event-list">
+          <li class="swal-event-image">
+            <img src="${event.image || "/event.gif"}" alt="Event picture">
           </li>
-          <br />
-          <br />
           <li><strong>Date:</strong><br /><small>${new Date(
             event.date
           ).toLocaleString(undefined, {
@@ -42,12 +46,11 @@ export async function showEventDetails(eventID, role) {
             event.description || "No description available"
           }</small></li>
           <hr />
-          <br />
         </ul>
 
         ${
           isAdmin
-            ? `<div style="display:flex; justify-content:center; gap:10px; margin-top:15px;">
+            ? `<div class="swal-event-actions">
                  <button id="edit-event" class="swal2-confirm swal2-styled">Edit</button>
                  <button id="delete-event" class="swal2-deny swal2-styled">Delete</button>
                  <button id="cancel-event" class="swal2-cancel swal2-styled">Cancel</button>
@@ -57,29 +60,59 @@ export async function showEventDetails(eventID, role) {
       `,
       showConfirmButton: !isAdmin,
       didOpen: () => {
-        if (isAdmin) {
-          const editBtn = document.getElementById("edit-event");
-          const deleteBtn = document.getElementById("delete-event");
-          const cancelBtn = document.getElementById("cancel-event");
+        if (!isAdmin) return;
 
-          editBtn.addEventListener("click", () => {
-            Swal.close();
-            editEvent(event._id);
-          });
+        const editButton = document.getElementById("edit-event");
+        const deleteButton = document.getElementById("delete-event");
+        const cancelButton = document.getElementById("cancel-event");
 
-          deleteBtn.addEventListener("click", () => {
-            Swal.close();
-            deleteEvent(event._id);
-          });
+        editButton.addEventListener("click", async () => {
+          Swal.close();
+          const { event: updatedEvent } = await editEvent(eventID);
 
-          cancelBtn.addEventListener("click", () => Swal.close());
-        }
+          if (updatedEvent) {
+            setEvents((previousEvents) =>
+              previousEvents.map((event) =>
+                event._id === eventID ? updatedEvent : event
+              )
+            );
+
+            Swal.fire({
+              icon: "success",
+              title: "Updated",
+              text: `"${event.title}" updated successfully`,
+              timer: 3000,
+              showConfirmButton: false,
+            });
+          }
+        });
+
+        deleteButton.addEventListener("click", async () => {
+          Swal.close();
+          const deleted = await deleteEvent(eventID, setEvents);
+
+          if (deleted) {
+            setEvents((previousEvents) =>
+              previousEvents.filter((event) => event._id !== eventID)
+            );
+
+            Swal.fire({
+              icon: "success",
+              title: "Deleted",
+              text: "Event successfully deleted",
+              timer: 3000,
+              showConfirmButton: false,
+            });
+          }
+        });
+
+        cancelButton.addEventListener("click", () => Swal.close());
       },
     });
   } catch (err) {
-    await Swal.fire({
+    Swal.fire({
       icon: "error",
-      title: "Sorry!",
+      title: "Error",
       text: err.message,
       showConfirmButton: true,
     });

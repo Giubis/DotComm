@@ -30,6 +30,7 @@ export async function deleteProfile(id, setUser) {
     title: "Deleting...",
     allowOutsideClick: false,
     didOpen: () => Swal.showLoading(),
+    showConfirmButton: false,
   });
 
   try {
@@ -43,6 +44,7 @@ export async function deleteProfile(id, setUser) {
       text: "Your account has been successfully deleted",
       timer: 3000,
       showConfirmButton: false,
+      timerProgressBar: true,
     });
 
     sessionStorage.clear();

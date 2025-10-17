@@ -7,39 +7,23 @@ import {
   signUpUser,
   signUpAdmin,
 } from "../utils/users";
-import { getEventByID } from "../API";
 import { Link } from "react-router-dom";
 import { parseJWT } from "../utils/misc/parseJWT";
 import { addEvent, findEvent, showMyEvents } from "../utils/events";
-import { useContext, useEffect, useState } from "react";
+import { useContext } from "react";
 import UserContext from "../contexts/UserContext";
+import EventsContext from "../contexts/EventsContext";
 
 import "../styles/Sidebar.css";
 
 export default function Sidebar() {
-  const [myEvents, setMyEvents] = useState([]);
+  const { events, setEvents } = useContext(EventsContext);
   const { user, setUser, token, setToken } = useContext(UserContext);
-  const { role } = parseJWT(token) || null;
+  const { id, role } = parseJWT(token) || null;
 
-  useEffect(() => {
-    const getMyEvents = async () => {
-      if (!user?.events?.length) {
-        return;
-      }
-
-      try {
-        const events = await Promise.all(
-          user.events.map((id) => getEventByID(id))
-        );
-
-        setMyEvents(events);
-      } catch (err) {
-        console.error(err);
-      }
-    };
-
-    getMyEvents();
-  }, [user]);
+  const myEvents = user?.events
+    ? events.filter((event) => user.events.includes(event._id))
+    : [];
 
   return (
     <>
@@ -89,12 +73,10 @@ export default function Sidebar() {
         {user && (
           <div className="user-section">
             <img
-              src={
-                user.avatar ||
-                "https://pbs.twimg.com/profile_images/1237550450/mstom_400x400.jpg"
-              }
+              src={user.avatar || "/avatar.webp"}
               alt={user.name || "User"}
               className="user-avatar"
+              onError={(event) => (event.currentTarget.src = "/avatar.gif")}
             />
             <h3>{user.username}</h3>
             <button onClick={() => editProfile(user._id, user, setUser)}>
@@ -105,7 +87,7 @@ export default function Sidebar() {
               Delete account
             </button>
             <button onClick={() => signOutUser(setUser, setToken)}>
-              Logout
+              Sign out
             </button>
           </div>
         )}
@@ -113,9 +95,13 @@ export default function Sidebar() {
         {user && role === "admin" && (
           <div className="admin-section">
             <button onClick={() => signUpAdmin()}>Create staff</button>
-            <button onClick={() => findUser()}>Edit user</button>
-            <button onClick={() => addEvent()}>Create event</button>
-            <button onClick={() => findEvent(role)}>Edit event</button>
+            <button onClick={() => findUser(id)}>Edit user</button>
+            <button onClick={() => addEvent(events, setEvents)}>
+              Create event
+            </button>
+            <button onClick={() => findEvent(role, events, setEvents)}>
+              Edit event
+            </button>
           </div>
         )}
       </aside>

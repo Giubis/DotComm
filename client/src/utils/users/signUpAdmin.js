@@ -1,5 +1,6 @@
 import { createAdmin } from "../../API";
 import Swal from "sweetalert2";
+import { validateEmail, validatePassword, validateURL } from "../misc";
 
 export async function signUpAdmin() {
   const { value: formValues } = await Swal.fire({
@@ -16,6 +17,7 @@ export async function signUpAdmin() {
     `,
     focusConfirm: false,
     confirmButtonText: "Create",
+    showCancelButton: true,
     preConfirm: () => {
       const email = document.getElementById("swal-email").value;
       const password = document.getElementById("swal-password").value;
@@ -33,6 +35,23 @@ export async function signUpAdmin() {
         return false;
       }
 
+      if (!validateEmail(email)) {
+        Swal.showValidationMessage("Please enter a valid email address");
+        return false;
+      }
+
+      if (!validatePassword(password)) {
+        Swal.showValidationMessage(
+          "Password must be at least 8 characters, include uppercase, lowercase, number, and symbol"
+        );
+        return false;
+      }
+
+      if (avatar && !validateURL(avatar)) {
+        Swal.showValidationMessage("Please enter a valid URL for the avatar");
+        return false;
+      }
+
       return { name, username, email, password, avatar, birthday, phone, bio };
     },
   });
@@ -40,10 +59,26 @@ export async function signUpAdmin() {
   if (!formValues) return;
 
   try {
+    Swal.fire({
+      title: "Creating...",
+      allowOutsideClick: false,
+      didOpen: () => {
+        Swal.showLoading();
+      },
+    });
+
     const result = await createAdmin(formValues);
 
-    Swal.fire("Success!", `User ${result.user.username} registered`, "success");
+    Swal.fire({
+      icon: "success",
+      title: "Success!",
+      text: `Admin user ${result.user.username} registered`,
+    });
   } catch (err) {
-    Swal.fire("Error", err.message, "error");
+    Swal.fire({
+      icon: "error",
+      title: "Error",
+      text: err.message,
+    });
   }
 }

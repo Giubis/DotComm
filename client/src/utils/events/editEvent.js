@@ -5,12 +5,19 @@ export async function editEvent(id) {
   let event;
 
   try {
+    Swal.fire({
+      title: "Getting event...",
+      allowOutsideClick: false,
+      didOpen: () => Swal.showLoading(),
+      showConfirmButton: false,
+    });
+
     ({ event } = await getEventByID(id));
   } catch (err) {
     Swal.fire({
       icon: "error",
       title: "Error",
-      text: err.message || "Failed to fetch event",
+      text: err.message,
     });
     return;
   }
@@ -86,7 +93,7 @@ export async function editEvent(id) {
 
   try {
     Swal.fire({
-      title: "Modifying event...",
+      title: "Editing...",
       allowOutsideClick: false,
       didOpen: () => Swal.showLoading(),
     });
@@ -98,16 +105,18 @@ export async function editEvent(id) {
     Swal.fire({
       icon: "success",
       title: "Success!",
-      text: `Event "${result.event.title}" modified successfully`,
+      text: `Event "${result.event.title}" edited successfully`,
       timer: 3000,
       showConfirmButton: false,
     });
+
+    return result;
   } catch (err) {
     Swal.close();
     Swal.fire({
       icon: "error",
       title: "Error",
-      text: err.message || "Failed to modify event",
+      text: err.message,
     });
   }
 }
