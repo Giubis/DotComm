@@ -1,9 +1,9 @@
-import Events from "./pages/Events";
 import Home from "./pages/Home";
 import { Route, Routes } from "react-router-dom";
 import Sidebar from "./components/Sidebar";
 
 import "./styles/App.css";
+import "./styles/Swal2.css";
 
 export default function App() {
   return (
@@ -12,7 +12,6 @@ export default function App() {
       <main className="main">
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/events" element={<Events />} />
         </Routes>
       </main>
     </div>

@@ -43,14 +43,31 @@ export default function Sidebar() {
 
   return (
     <>
+      <input
+        id="hamburger14-input"
+        type="checkbox"
+        className="hamburger-toggle"
+      />
+      <label
+        htmlFor="hamburger14-input"
+        className="hamburger14"
+        aria-hidden="true"
+      >
+        <div className="hamburger14-container">
+          <span className="circle" />
+          <span className="line line1" />
+          <span className="line line2" />
+          <span className="line line3" />
+        </div>
+      </label>
+
       <aside className="sidebar">
+        <img src="./logo.png" alt="Logo" className="sidebar-logo" />
+
         <nav>
           <ul>
             <li>
               <Link to="/">Home</Link>
-            </li>
-            <li>
-              <Link to="/events">Events</Link>
             </li>
             <li>
               <Link to="/faq">FAQ</Link>
@@ -60,8 +77,6 @@ export default function Sidebar() {
 
         {!user && (
           <div className="auth-section">
-            <hr />
-            <br />
             <button onClick={() => signInUser(setUser, setToken)}>
               Sign in
             </button>
@@ -73,8 +88,6 @@ export default function Sidebar() {
 
         {user && (
           <div className="user-section">
-            <hr />
-            <br />
             <img
               src={
                 user.avatar ||
@@ -98,9 +111,7 @@ export default function Sidebar() {
         )}
 
         {user && role === "admin" && (
-          <div className="user-section">
-            <hr />
-            <br />
+          <div className="admin-section">
             <button onClick={() => signUpAdmin()}>Create staff</button>
             <button onClick={() => findUser()}>Edit user</button>
             <button onClick={() => addEvent()}>Create event</button>

@@ -1,33 +1,21 @@
-.home {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 2rem;
-}
-
 .hero {
   position: relative;
-  height: 60vh;
-  min-height: 400px;
+  height: 50vh;
   display: flex;
   align-items: center;
   justify-content: center;
+  background: url("https://t3.ftcdn.net/jpg/07/15/47/48/360_F_715474880_CWVi1qHU3NH173hn9ZX1rg1aD8jyfBnZ.jpg")
+    center/cover no-repeat;
   border-radius: 1.5rem;
   overflow: hidden;
   margin-bottom: 3rem;
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
-  background: url("https://images.unsplash.com/photo-1531058020387-3be344556be6?auto=format&fit=crop&w=1600&q=80")
-    center/cover no-repeat;
 }
 
 .hero::before {
   content: "";
   position: absolute;
   inset: 0;
-  background: linear-gradient(
-    to bottom right,
-    rgba(0, 119, 255, 0.7),
-    rgba(0, 198, 255, 0.7)
-  );
+  background: rgba(30, 30, 30, 0.6);
   z-index: 1;
 }
 
@@ -35,114 +23,26 @@
   position: relative;
   z-index: 2;
   text-align: center;
-  color: white;
-  padding: 2rem;
-  max-width: 800px;
+  color: #ffffff;
 }
 
 .hero h1 {
-  font-size: 2.8rem;
+  font-size: 3rem;
   font-weight: 700;
   margin-bottom: 1rem;
+  font-family: "Bebas Neue", sans-serif;
 }
 
 .hero p {
   font-size: 1.2rem;
-  line-height: 1.6;
-  margin-bottom: 2rem;
-  color: #f0f4ff;
+  color: #ccc;
 }
 
-.hero-buttons {
-  display: flex;
-  justify-content: center;
-  gap: 1rem;
-  flex-wrap: wrap;
-}
-
-.hero button {
-  background-color: white;
-  color: #0077ff;
-  border: none;
-  border-radius: 0.75rem;
-  padding: 0.9rem 1.7rem;
-  font-weight: 600;
-  font-size: 1rem;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.hero button:hover {
-  background-color: #f0f4ff;
-  transform: translateY(-2px);
-}
-
-.events-section {
-  text-align: center;
-}
-
-.events-section h2 {
-  font-size: 2rem;
-  margin-bottom: 2rem;
-}
-
-.events-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-  gap: 1.5rem;
-}
-
-.event-card {
-  background-color: #ffffff;
-  border-radius: 1rem;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  padding: 1.5rem;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.event-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
-}
-
-.event-info h3 {
-  margin-bottom: 0.5rem;
-  color: #0077ff;
-}
-
-.event-date {
-  font-size: 0.9rem;
-  color: #555;
-  margin-bottom: 1rem;
-}
-
-.event-description {
-  font-size: 1rem;
-  color: #333;
-  margin-bottom: 1rem;
-}
-
-.event-actions {
-  display: flex;
-  justify-content: space-between;
-  gap: 0.5rem;
-}
-
-.event-actions button {
-  flex: 1;
-  background-color: #0077ff;
-  color: white;
-  border: none;
-  border-radius: 0.5rem;
-  padding: 0.6rem 1rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background-color 0.2s ease;
-}
-
-.event-actions button:hover {
-  background-color: #005fd4;
+@media (max-width: 768px) {
+  .hero {
+    height: 40vh;
+  }
+  .hero h1 {
+    font-size: 2.2rem;
+  }
 }

@@ -1,0 +1,119 @@
+.events-section {
+  width: 100%;
+}
+
+.events-section input[type="text"] {
+  width: 100%;
+  padding: 0.6rem 1rem;
+  border-radius: 0.5rem;
+  border: 1px solid #333;
+  margin-bottom: 1.5rem;
+  background-color: #1e1e1e;
+  color: #ffffff;
+  box-sizing: border-box;
+}
+
+.events-section input[type="text"]:focus {
+  outline: none;
+  border-color: #0a84ff;
+  box-shadow: 0 0 10px rgba(10, 132, 255, 0.5);
+}
+
+.events-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+
+.event-card {
+  background-color: #1e1e1e;
+  border-radius: 1rem;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+  transition: transform 0.3s, box-shadow 0.3s;
+  position: relative;
+  height: 400px;
+}
+
+.event-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 0 10px 1px rgba(10, 132, 255, 0.6);
+}
+
+.event-image {
+  width: 100%;
+  height: 160px;
+  background-size: cover;
+  background-position: center;
+  border-top-left-radius: 1rem;
+  border-top-right-radius: 1rem;
+}
+
+.event-info {
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  overflow: hidden;
+}
+
+.event-info h3 {
+  color: #0a84ff;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.event-date {
+  color: #aaa;
+  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.event-description {
+  color: #ddd;
+  font-size: 1rem;
+  overflow-y: auto;
+  flex: 1;
+  margin-bottom: 0.5rem;
+  padding-right: 0.25rem;
+}
+
+.event-actions {
+  display: flex;
+  gap: 0.5rem;
+  padding: 0 1rem 1rem;
+}
+
+.event-actions button {
+  flex: 1;
+  background-color: #0a84ff;
+  border: none;
+  border-radius: 0.5rem;
+  padding: 0.6rem 1rem;
+  font-weight: 600;
+  color: #fff;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.event-actions button:hover {
+  background-color: #0060d6;
+  transform: translateY(-2px);
+}
+
+.event-progress {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 5px;
+  border-radius: 0 0 1rem 1rem;
+  transition: width 0.4s ease, background-color 0.4s ease;
+}
+
+@media (max-width: 768px) {
+  .events-grid {
+    grid-template-columns: 1fr;
+  }
+}
