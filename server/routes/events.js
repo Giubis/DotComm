@@ -7,6 +7,7 @@ const {
   patchEventByID,
   deleteEventByID,
   registerUserToEvent,
+  unregisterUserFromEvent,
 } = require("../controllers/events.controller");
 
 const router = express.Router();
@@ -17,5 +18,6 @@ router.post("/", authToken, authAdmin, createEvent);
 router.post("/:id/register", authToken, registerUserToEvent);
 router.patch("/:id", authToken, authAdmin, patchEventByID);
 router.delete("/:id", authToken, authAdmin, deleteEventByID);
+router.delete("/:id/unregister", authToken, authAdmin, unregisterUserFromEvent);
 
 module.exports = router;
