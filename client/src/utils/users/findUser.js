@@ -1,8 +1,9 @@
 import { deleteUser, editUser } from "../users";
 import { getUsers } from "../../API";
+import { unjoinEvent } from "../events";
 import Swal from "sweetalert2";
 
-export async function findUser(id) {
+export async function findUser(id, events) {
   try {
     Swal.fire({
       title: "Getting users...",
@@ -84,7 +85,7 @@ export async function findUser(id) {
             const user = otherUsers.find((user) => user._id === userID);
 
             if (user) {
-              showUserDetails(user);
+              showUserDetails(user, events);
             }
           }
         });
@@ -99,7 +100,9 @@ export async function findUser(id) {
   }
 }
 
-async function showUserDetails(user) {
+async function showUserDetails(user, events) {
+  const userEvents = events.filter((event) => user.events.includes(event._id));
+
   const result = await Swal.fire({
     title: user.name,
     html: `
@@ -108,6 +111,30 @@ async function showUserDetails(user) {
       <p><strong>Phone:</strong> ${user.phone || "N/A"}</p>
       <p><strong>Role:</strong> ${user.role || "user"}</p>
       <p><strong>Bio:</strong> ${user.bio || "No bio"}</p>
+      <p><strong>Events:</strong>
+      <div id="user-events">
+        ${
+          userEvents && userEvents.length
+            ? userEvents
+                .map(
+                  (event) => `
+                  <div style="display:flex; justify-content: space-between; align-items: center;">
+                    <small>${event.title}</small>
+                    <button 
+                      class="unjoin-button" 
+                      data-eventid="${event._id}" 
+                      style="cursor:pointer; color:red; border:none; background:none;"
+                    >
+                      REMOVE
+                    </button>
+                  </div>
+                  <hr />
+                `
+                )
+                .join("")
+            : "<small>No events</small>"
+        }
+      </div>
     `,
     showConfirmButton: true,
     showCancelButton: true,
@@ -115,6 +142,16 @@ async function showUserDetails(user) {
     confirmButtonText: "Edit",
     cancelButtonText: "Cancel",
     denyButtonText: "Delete account",
+    didOpen: () => {
+      const buttons = document.querySelectorAll(".unjoin-button");
+      buttons.forEach((button) => {
+        button.addEventListener("click", async (event) => {
+          const eventID = event.currentTarget.dataset.eventid;
+
+          await unjoinEvent(eventID, user._id);
+        });
+      });
+    },
   });
 
   if (result.isConfirmed) {

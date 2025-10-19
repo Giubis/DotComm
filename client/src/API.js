@@ -203,6 +203,28 @@ export async function createEvent(event) {
   }
 }
 
+// Register user to event
+export async function registerUserToEvent(eventID) {
+  try {
+    const res = await fetch(`${API_URL}/events/${eventID}/register`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+      },
+    });
+
+    if (!res.ok) {
+      const error = await res.json().catch(() => ({}));
+      throw new Error(error.message);
+    }
+
+    return await res.json();
+  } catch (err) {
+    throw new Error(err.message);
+  }
+}
+
 // Edit event by ID (ADMIN only)
 export async function patchEventByID(id, updates) {
   try {
@@ -248,15 +270,16 @@ export async function deleteEventByID(id) {
   }
 }
 
-// Register user to event
-export async function registerUserToEvent(eventID) {
+// Unregister user to event
+export async function unregisterUserFromEvent(eventID, userID) {
   try {
-    const res = await fetch(`${API_URL}/events/${eventID}/register`, {
-      method: "POST",
+    const res = await fetch(`${API_URL}/events/${eventID}/unregister`, {
+      method: "DELETE",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${sessionStorage.getItem("token")}`,
       },
+      body: JSON.stringify({ userID }),
     });
 
     if (!res.ok) {

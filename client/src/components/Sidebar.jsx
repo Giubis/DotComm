@@ -95,7 +95,9 @@ export default function Sidebar() {
         {user && role === "admin" && (
           <div className="admin-section">
             <button onClick={() => signUpAdmin()}>Create staff</button>
-            <button onClick={() => findUser(id)}>Edit user</button>
+            <button onClick={() => findUser(id, events, setEvents)}>
+              Edit user
+            </button>
             <button onClick={() => addEvent(events, setEvents)}>
               Create event
             </button>

@@ -6,3 +6,4 @@ export * from "./findEvent";
 export * from "./joinEvent";
 export * from "./showEventDetails";
 export * from "./showMyEvents";
+export * from "./unjoinEvent";
